@@ -1,0 +1,116 @@
+<main role="main">
+  <div class="jumbotron" style="text-align:center">
+    <div class="container">
+      <h1 class="display-4">课程列表</h1>
+      <p>Hi，下列是你在学习的课程</p>
+      <button type="button" class="btn btn-primary" (click)="openModal(template)">添加课程</button>
+
+      <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">新课程</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="courseName" class="form-control" placeholder="课程名称" required autofocus>
+          <input type="number" id="courseID" class="form-control" placeholder="课程id" required>
+
+          <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="cancelAdd()">取消</button>
+          <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="confirmAdd()">确认</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="card col-md-4 box-shadow">
+        <div class="card-header">
+          <h2 class="my-0 font-weight-normal">00 高级Web</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-title pricing-card-title">课程人数：10
+          </p>
+          <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        </div>
+      </div>
+
+      <div class="card col-md-4 box-shadow">
+        <div class="card-header">
+          <h2 class="my-0 font-weight-normal">00 高级Web</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-title pricing-card-title">课程人数：10
+          </p>
+          <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        </div>
+      </div>
+
+      <div class="card col-md-4 box-shadow">
+        <div class="card-header">
+          <h2 class="my-0 font-weight-normal">00 高级Web</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-title pricing-card-title">课程人数：10
+          </p>
+          <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        </div>
+      </div>
+
+      <div class="card col-md-4 box-shadow">
+        <div class="card-header">
+          <h2 class="my-0 font-weight-normal">00 高级Web</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-title pricing-card-title">课程人数：10
+          </p>
+          <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        </div>
+      </div>
+
+      <div class="card col-md-4 box-shadow">
+        <div class="card-header">
+          <h2 class="my-0 font-weight-normal">00 高级Web</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-title pricing-card-title">课程人数：10
+          </p>
+          <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        </div>
+      </div>
+
+      <div class="card col-md-4 box-shadow">
+        <div class="card-header">
+          <h2 class="my-0 font-weight-normal">00 高级Web</h2>
+        </div>
+        <div class="card-body">
+          <p class="card-title pricing-card-title">课程人数：10
+          </p>
+          <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /container -->
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <li class="page-item">
+        <a class="page-link" href="#">上一页</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">1</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">2</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">3</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">下一页</a>
+      </li>
+    </ul>
+  </nav>
+</main>

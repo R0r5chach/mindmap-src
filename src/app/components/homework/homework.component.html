@@ -1,0 +1,51 @@
+<div class="jumbotron" style="text-align:center">
+  <h2>
+    作业列表
+  </h2>
+  <p>这是作业列表</p>
+  <button type="button" class="btn btn-primary" (click)="openModal(template)">添加课程</button>
+
+  <ng-template #template>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">新作业</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="courseName" class="form-control" placeholder="课程名称" required autofocus>
+        <input type="number" id="courseID" class="form-control" placeholder="课程id" required>
+
+        <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="cancelAdd()">取消</button>
+        <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="confirmAdd()">确认</button>
+      </div>
+    </ng-template>
+
+
+</div>
+
+<div class="row justify-content-center">
+  <div class="card col-md-8">
+    <div class="card-header">
+      <h2>1.这是简答题题目</h2>
+    </div>
+    <div class="card-body">
+      <p>课程人数：10
+      </p>
+      <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="card col-md-8">
+      <div class="card-header">
+        <h2>2.这是选择题题目</h2>
+      </div>
+      <div class="card-body">
+        <p>课程人数：10
+        </p>
+        <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+      </div>
+    </div>
+  </div>

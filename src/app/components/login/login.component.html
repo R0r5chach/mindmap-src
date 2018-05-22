@@ -1,0 +1,26 @@
+
+<body class="text-center">
+  <form class="form-signin">
+    <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
+    <label for="inputName" class="sr-only">用户名</label>
+    <input type="text" id="inputName" class="form-control" placeholder="用户名" required autofocus>
+    <label for="inputPassword" class="sr-only">密码</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
+    
+    <label for="userType" class="sr-only">教师类型</label>
+    <input type="radio" name="userType" id="teacher">教师
+    <label for="userType" class="sr-only">学生类型</label>
+    <input type="radio" name="userType" id="student">学生
+
+    <!-- <div class="custom"> -->
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me">记住我
+      </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="login()">登录</button>
+    <a routerLink="/register">注册</a>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+  </form>
+</body>

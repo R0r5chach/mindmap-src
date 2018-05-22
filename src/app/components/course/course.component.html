@@ -1,0 +1,49 @@
+<!-- <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" href="#">思维导图</a>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">作业</a>
+        <a class="dropdown-item" href="#">选择题1</a>
+        <a class="dropdown-item" href="#">简答题2</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#">选择题3</a>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">课件</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#">资源</a>
+    </li>
+  </ul> -->
+
+
+
+
+
+<div class="row">
+  <div class="col-md-10">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="col-md-2">
+      <h2>高级Web</h2>
+      <ul class="nav nav-tabs  flex-column">
+        <li class="nav-item">
+          <a routerLink="mindmap" class="nav-link">思维导图</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="homework" class="nav-link">作业</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="slides" class="nav-link">课件</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="resource" class="nav-link">资源</a>
+        </li>
+      </ul>
+    </div>
+  
+</div>

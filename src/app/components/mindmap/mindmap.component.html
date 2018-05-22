@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-md-2">
+    <h2>高级Web</h2>
+    <ul class="nav nav-tabs  flex-column" id="side-list">
+      <li class="nav-item">
+        <ul class="nav nav-tabs  flex-column">思维导图一
+          <li class="nav-item">前端</li>
+          <li class="nav-item">后端</li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <ul class="nav nav-tabs  flex-column">思维导图二
+
+        </ul>
+      </li>
+      <li class="nav-item">
+        <ul class="nav nav-tabs  flex-column">思维导图三
+
+        </ul>
+      </li>
+      <li class="nav-item">
+        <ul class="nav nav-tabs  flex-column">思维导图四
+
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-md-10">
+
+    <div class="jumbotron" style="text-align:center">
+      <h2>
+        思维导图 01
+      </h2>
+
+    </div>
+
+    <div class="row justify-content-center">
+      <button class="btn btn-md btn-primary" (click)="addNode()">增加</button>
+      <button class="btn btn-md btn-primary" (click)="removeNode()">移除</button>
+    </div>
+
+    <div id="jsmind_container"></div>
+  </div>
+</div>

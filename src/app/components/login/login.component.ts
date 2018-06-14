@@ -19,25 +19,28 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.user = {
-      name: '',
+      email: '',
       password: '',
-      type: 'STUDENT'
+      type: 'TEACHER'
     };
   }
 
   setTypeStu() {
     this.user.type = 'STUDENT';
+    console.log(this.user);
   }
   setTypeTec() {
     this.user.type = 'TEACHER';
+    console.log(this.user);
   }
 
   login() {
     console.dir(this.user);
     this.router.navigate(['courselist']);
     //与服务器端通信，确认是否登录成功，若成功返回token
-    this.authentication.login(this.user);
+    let token = this.authentication.login(this.user);
 
     this.storage.setItem("userType", this.user.type);
+    this.storage.setItem("token", token);
   }
 }

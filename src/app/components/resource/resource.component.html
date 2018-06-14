@@ -1,3 +1,15 @@
-<p>
-  resource works!
-</p>
+<div *ngFor="let res of resources; let i = index" class="card box-shadow" style="width: 45rem; margin: 10px;">
+  <div class="card-header">
+    <h2>{{i+1}}. {{res.name}}</h2>
+  </div>
+
+  <div *ngIf="res.type=='FILE'" class="card-body">
+    <p>{{res.description}}</p>
+    <button class="btn btn-primary" (click)="downloadResource(res.rid)">下载</button>
+  </div>
+
+  <div *ngIf="res.type=='LINK'" class="card-body">
+      <p>{{res.description}}</p>
+      <a href="{{res.link}}" >进入</button>
+    </div>
+</div>

@@ -1,4 +1,10 @@
-<p>
-  lecture works!
-</p>
-<input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".pdf,.doc,.docx">
+<div *ngFor="let lec of lectures; let i = index" class="card box-shadow" style="width: 45rem; margin: 10px;">
+  <div class="card-header">
+    <h2>{{i+1}}. {{lec.title}}</h2>
+  </div>
+
+  <div class="card-body">
+    <p>{{lec.description}}</p>
+    <button class="btn btn-primary" (click)="downloadLecture(lec.lid)">下载</button>
+  </div>
+</div>

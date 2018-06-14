@@ -12,6 +12,25 @@ import 'rxjs/Rx';
 })
 export class LectureComponent implements OnInit {
 
+  lectures = [
+    {
+      "lid": 78,
+      "title": "第一课",
+      "description": "这是高级web第一次课的课件"
+    },
+    {
+      "lid": 8,
+      "title": "第二课",
+      "description": "这是高级web第二次课的课件"
+    },
+    {
+      "lid": 908,
+      "title": "第三课",
+      "description": "这是高级web第三次课的课件"
+    }
+  ];
+
+
   constructor(private http: Http) { }
 
   ngOnInit() {
@@ -38,6 +57,11 @@ export class LectureComponent implements OnInit {
           error => console.log(error)
         )
     }
+  }
+
+  downloadLecture(lectureId) {
+    console.log("download lecture" + lectureId);
+    //http
   }
 
 }

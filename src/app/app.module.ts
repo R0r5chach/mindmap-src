@@ -9,6 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CommonModule } from '@angular/common';
+import { FileUploadModule } from 'ng2-file-upload';
+
 
 //引入组件
 import { AppComponent } from './app.component';
@@ -56,7 +59,9 @@ import { ResourceComponent } from './components/resource/resource.component';
     JsonpModule,
     ModalModule.forRoot(),
     TabsModule.forRoot(),
-    AccordionModule.forRoot()
+    AccordionModule.forRoot(),
+    CommonModule,
+    FileUploadModule
   ],
   providers: [
     MyHttpService,

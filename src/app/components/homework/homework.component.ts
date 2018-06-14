@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { StorageService } from '../../services/storage.service';
 
@@ -8,6 +8,9 @@ import { StorageService } from '../../services/storage.service';
   styleUrls: ['./homework.component.css']
 })
 export class HomeworkComponent implements OnInit {
+
+  @ViewChild('test', { read: ElementRef }) private test: ElementRef;
+
   userType;
 
   questions = [
@@ -87,7 +90,7 @@ export class HomeworkComponent implements OnInit {
 
       let body = {
         "qid": q.qid,
-        "answer":q.answer
+        "answer": q.answer
       }
       console.log(body);
 

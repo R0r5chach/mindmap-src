@@ -102,52 +102,56 @@
                         </li>
                         <ng-template #addMultichoiceTemplate>
                             <div class="modal-header">
-                              <h4 class="modal-title pull-left">新选择题</h4>
-                              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
+                                <h4 class="modal-title pull-left">新选择题</h4>
+                                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
-                              <form class="form-newMulti" (ngSubmit)="form.form.valid && addMultichoice()" #form="ngForm">
-                                <input type="text" name="title" [(ngModel)]="homeworkContent.newMultichoice.description" class="form-control" placeholder="问题描述" required
-                                  autofocus>
-                                <input type="text" name="op1" [(ngModel)]="homeworkContent.newMultichoice.choices[0].value" class="form-control" placeholder="选项A" required>
-                                <input type="text" name="op2" [(ngModel)]="homeworkContent.newMultichoice.choices[1].value" class="form-control" placeholder="选项B" required>
-                                <input type="text" name="op3" [(ngModel)]="homeworkContent.newMultichoice.choices[2].value" class="form-control" placeholder="选项C" required>
-                                <input type="text" name="op4" [(ngModel)]="homeworkContent.newMultichoice.choices[3].value" class="form-control" placeholder="选项D" required> 正确答案
-                          
-                                <input type="radio" name="radiobox" checked="true" (click)="setMultianswer('A')"> A
-                                <input type="radio" name="radiobox" (click)="setMultiAnswer('B')"> B
-                                <input type="radio" name="radiobox" (click)="setMultiAnswer('C')"> C
-                                <input type="radio" name="radiobox" (click)="setMultiAnswer('D')"> D
-                                <br>
-                                <input type="button" name="cancel" class="btn btn-default" value="取消" (click)="cancelAddQuestion()">
-                                <input type="submit" name="confirm" class="btn btn-primary" value="确认">
-                              </form>
+                                <form class="form-newMulti" (ngSubmit)="form.form.valid && addMultichoice()" #form="ngForm">
+                                    <input type="text" name="title" [(ngModel)]="homeworkContent.newMultichoice.description" class="form-control" placeholder="问题描述"
+                                        required autofocus>
+                                    <input type="text" name="op1" [(ngModel)]="homeworkContent.newMultichoice.choices[0].value" class="form-control" placeholder="选项A"
+                                        required>
+                                    <input type="text" name="op2" [(ngModel)]="homeworkContent.newMultichoice.choices[1].value" class="form-control" placeholder="选项B"
+                                        required>
+                                    <input type="text" name="op3" [(ngModel)]="homeworkContent.newMultichoice.choices[2].value" class="form-control" placeholder="选项C"
+                                        required>
+                                    <input type="text" name="op4" [(ngModel)]="homeworkContent.newMultichoice.choices[3].value" class="form-control" placeholder="选项D"
+                                        required> 正确答案
+
+                                    <input type="radio" name="radiobox" checked="true" (click)="setMultianswer('A')"> A
+                                    <input type="radio" name="radiobox" (click)="setMultiAnswer('B')"> B
+                                    <input type="radio" name="radiobox" (click)="setMultiAnswer('C')"> C
+                                    <input type="radio" name="radiobox" (click)="setMultiAnswer('D')"> D
+                                    <br>
+                                    <input type="button" name="cancel" class="btn btn-default" value="取消" (click)="cancelAddQuestion()">
+                                    <input type="submit" name="confirm" class="btn btn-primary" value="确认">
+                                </form>
                             </div>
-                          </ng-template>
-                          
-                          <li>
+                        </ng-template>
+
+                        <li>
                             <a href="javascript:;" (click)="openModal(addShortanswerTemplate)">
                                 <span>简答题</span>
                             </a>
                         </li>
-                          <ng-template #addShortanswerTemplate>
+                        <ng-template #addShortanswerTemplate>
                             <div class="modal-header">
-                              <h4 class="modal-title pull-left">新简答题</h4>
-                              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
+                                <h4 class="modal-title pull-left">新简答题</h4>
+                                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
-                              <form class="form-signin" (ngSubmit)="form.form.valid && addShortanswer()" #form="ngForm">
-                                <input type="text" name="title" [(ngModel)]="homeworkContent.newShortanswer.description" class="form-control" placeholder="问题描述" required
-                                  autofocus>
-                                <input type="button" class="btn btn-default" name="cancel" value="取消" (click)="cancelAddQuestion()">
-                                <input type="submit" class="btn btn-primary" name="confirm" value="确认">
-                              </form>
+                                <form class="form-signin" (ngSubmit)="form.form.valid && addShortanswer()" #form="ngForm">
+                                    <input type="text" name="title" [(ngModel)]="homeworkContent.newShortanswer.description" class="form-control" placeholder="问题描述"
+                                        required autofocus>
+                                    <input type="button" class="btn btn-default" name="cancel" value="取消" (click)="cancelAddQuestion()">
+                                    <input type="submit" class="btn btn-primary" name="confirm" value="确认">
+                                </form>
                             </div>
-                          </ng-template>
+                        </ng-template>
                     </ul>
                 </li>
             </ul>
@@ -163,29 +167,102 @@
             </div>
             <ul>
                 <li class="nav-item">
-                    <a href="javascript:;">
+                    <a href="javascript:;" (click)="lgModal.show()">
                         <i class="my-icon nav-icon icon_3"></i>
-                        <span>新增题目</span>
+                        <span>新增课件</span>
                         <i class="my-icon nav-more"></i>
                     </a>
-                    <ul>
-                        <li>
-                            <a href="javascript:;">
-                                <span>选择题</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span>填空题</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span>简答题</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
+                <!--弹窗输入课件信息-->
+                <div bsModal #lgModal="bs-modal" class="modal fade" >
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title pull-left">新课件</h4>
+                                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" style="min-width: 800px;">
+                                <div class="card">
+                                    <div class="card-header">
+                                        文件上传操作
+                                    </div>
+                                    <div class="card-body">
+                                        <input #firstdiv type="file" ng2FileSelect [uploader]="uploader" />
+                                        <!--             <button (click)="fileSelect()">选择文件</button>           -->
+                                        <button (click)="fileAllUp()">全部上传</button>
+                                        <button (click)="fileAllCancel()">全部取消</button>
+                                        <button (click)="fileAllDelete()">清除列表</button>
+
+                                    </div>
+                                </div>
+
+                                <!--ATTENTION-->
+                                <div class="card">
+                                    <div class="card-header">
+                                        上传文件列表
+                                    </div>
+                                    <div class="card-body">
+                                        <p>已选文件数量：{{uploader.queue.length}}</p>
+                                        <!--文件上传显示表格-->
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 100px">名称</th>
+                                                    <th style="width: 100px">保存名</th>
+                                                    <th style="width: 100px">文件大小</th>
+                                                    <th style="width: 100px">进度</th>
+                                                    <th style="width: 100px">状态</th>
+                                                    <th style="width: 168px">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of uploader.queue">
+                                                    <td>
+                                                        <strong>{{item.file.name}}</strong>></td>
+                                                    <td>
+                                                        <input type="text" (change)="changeFileName($event, item)">
+                                                    </td>
+                                                    <td>
+                                                        <span>{{ item.file.size/1024/1024 | number:'.2' }} MB</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="progress" style="margin-bottom: 0; height: 70%; width: 90%">
+                                                            <div class="progress-bar" style="margin-bottom: 0; height: 100%; background-color: red" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span *ngIf="item.isSuccess">成功</span>
+                                                        <span *ngIf="!item.isUploaded">未上传</span>
+                                                        <span *ngIf="item.isCancel">取消</span>
+                                                        <span *ngIf="item.isError">错误</span>
+                                                    </td>
+                                                    <td>
+                                                        <button (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                            上传
+                                                        </button>
+                                   <!--                     <button (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                            取消
+                                                        </button>           -->
+                                                        <button (click)="item.remove()">
+                                                            清除
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+
+                                <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="modalRef.hide()">取消</button>
+                                <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="addLecture()">确认</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ul>
         </div>
     </div>

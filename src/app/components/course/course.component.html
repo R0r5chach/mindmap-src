@@ -174,12 +174,12 @@
                     </a>
                 </li>
                 <!--弹窗输入课件信息-->
-                <div bsModal #lgModal="bs-modal" class="modal fade" >
+                <div bsModal #lgModal="bs-modal" class="modal fade">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title pull-left">新课件</h4>
-                                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                <button type="button" class="close pull-right" aria-label="Close" (click)="lgModal.hide()">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -191,9 +191,9 @@
                                     <div class="card-body">
                                         <input #firstdiv type="file" ng2FileSelect [uploader]="uploader" />
                                         <!--             <button (click)="fileSelect()">选择文件</button>           -->
-                                        <button (click)="fileAllUp()">全部上传</button>
-                                        <button (click)="fileAllCancel()">全部取消</button>
-                                        <button (click)="fileAllDelete()">清除列表</button>
+                                        <button (click)="fileAllUp(uploader)">全部上传</button>
+                                        <button (click)="fileAllCancel(uploader)">全部取消</button>
+                                        <button (click)="fileAllDelete(uploader)">清除列表</button>
 
                                     </div>
                                 </div>
@@ -211,9 +211,9 @@
                                                 <tr>
                                                     <th style="width: 100px">名称</th>
                                                     <th style="width: 100px">保存名</th>
-                                                    <th style="width: 100px">文件大小</th>
-                                                    <th style="width: 100px">进度</th>
-                                                    <th style="width: 100px">状态</th>
+                                                    <th style="width: 70px">文件大小</th>
+                                                    <th style="width: 150px">进度</th>
+                                                    <th style="width: 80px">状态</th>
                                                     <th style="width: 168px">操作</th>
                                                 </tr>
                                             </thead>
@@ -242,7 +242,7 @@
                                                         <button (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
                                                             上传
                                                         </button>
-                                   <!--                     <button (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                        <!--                     <button (click)="item.cancel()" [disabled]="!item.isUploading">
                                                             取消
                                                         </button>           -->
                                                         <button (click)="item.remove()">
@@ -257,8 +257,8 @@
 
 
 
-                                <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="modalRef.hide()">取消</button>
-                                <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="addLecture()">确认</button>
+                                <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="lgModal.hide()">关闭</button>
+                                <!--     <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="addLecture()">确认</button>   -->
                             </div>
                         </div>
                     </div>
@@ -283,15 +283,124 @@
                     </a>
                     <ul>
                         <li>
-                            <a href="javascript:;">
-                                <span>链接</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
+                            <a href="javascript:;" (click)="fileRecources.show()">
                                 <span>文件</span>
                             </a>
                         </li>
+                        <!--弹窗输入文件信息-->
+                        <div bsModal #fileRecources="bs-modal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name2">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content" style="font-size: 14px; color: black">
+                                    <!--文字离奇消失，是道德的沦陷，还是人心的不古，林芳，你怎么看-->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title pull-left">新文件</h4>
+                                        <button type="button" class="close pull-right" aria-label="Close" (click)="fileRecources.hide()">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="min-width: 800px;">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                文件上传操作
+                                            </div>
+                                            <div class="card-body">
+                                                <input #firstdiv type="file" ng2FileSelect [uploader]="recourcesContent.uploader" />
+                                                <!--             <button (click)="fileSelect()">选择文件</button>           -->
+                                                <button (click)="fileAllUp(recourcesContent.uploader)">全部上传</button>
+                                                <button (click)="fileAllCancel(recourcesContent.uploader)">全部取消</button>
+                                                <button (click)="fileAllDelete(recourcesContent.uploader)">清除列表</button>
+
+                                            </div>
+                                        </div>
+
+                                        <!--ATTENTION-->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                上传文件列表
+                                            </div>
+                                            <div class="card-body">
+                                                <p>已选文件数量：{{uploader.queue.length}}</p>
+                                                <!--文件上传显示表格-->
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 100px">名称</th>
+                                                            <th style="width: 100px">保存名</th>
+                                                            <th style="width: 70px">文件大小</th>
+                                                            <th style="width: 150px">进度</th>
+                                                            <th style="width: 80px">状态</th>
+                                                            <th style="width: 168px">操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of recourcesContent.uploader.queue">
+                                                            <td>
+                                                                <strong>{{item.file.name}}</strong>></td>
+                                                            <td>
+                                                                <input type="text" (change)="changeFileName($event, item)">
+                                                            </td>
+                                                            <td>
+                                                                <span>{{ item.file.size/1024/1024 | number:'.2' }} MB</span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="progress" style="margin-bottom: 0; height: 70%; width: 90%">
+                                                                    <div class="progress-bar" style="margin-bottom: 0; height: 100%; background-color: red" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span *ngIf="item.isSuccess">成功</span>
+                                                                <span *ngIf="!item.isUploaded">未上传</span>
+                                                                <span *ngIf="item.isCancel">取消</span>
+                                                                <span *ngIf="item.isError">错误</span>
+                                                            </td>
+                                                            <td>
+                                                                <button (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                                                                    上传
+                                                                </button>
+                                                                <!--                     <button (click)="item.cancel()" [disabled]="!item.isUploading">
+                                                取消
+                                            </button>           -->
+                                                                <button (click)="item.remove()">
+                                                                    清除
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
+                                        <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="fileRecources.hide()">关闭</button>
+                                        <!--     <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="addLecture()">确认</button>   -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <li>
+                            <a href="javascript:;" (click)="openRecourcesModal(addURLTemplate)">
+                                <span>URL</span>
+                            </a>
+                        </li>
+                        <ng-template #addURLTemplate>
+                            <div class="modal-header">
+                                <h4 class="modal-title pull-left">新增URL资源</h4>
+                                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-signin" (ngSubmit)="form.form.valid && addShortanswer()" #form="ngForm">
+                                    <input type="text" name="title" [(ngModel)]="recourcesContent.URL.name" class="form-control" placeholder="资源名" required autofocus>
+                                    <input type="text" name="title" [(ngModel)]="recourcesContent.URL.location" class="form-control" placeholder="资源位置" required
+                                        autofocus>
+                                    <input type="button" class="btn btn-default" name="cancel" value="取消" (click)="cancelAdd()">
+                                    <input type="submit" class="btn btn-primary" name="confirm" value="确认" (click)="addURL()">
+                                </form>
+                            </div>
+                        </ng-template>
                     </ul>
                 </li>
             </ul>

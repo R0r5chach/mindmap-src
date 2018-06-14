@@ -75,6 +75,20 @@ export class CourseComponent implements OnInit {
         description: "",
         data: ""
     };
+
+    recourcesContent = {
+        uploader: new FileUploader({
+            url: "http://10.222.174.42:8080" + "/lectures",
+            method: "POST",
+            itemAlias: "uploadedfile",
+            autoUpload: false
+        }),
+        URL:{
+            name:"",
+            location:""
+        }
+    }
+
     ngOnInit() {
         this.startJquery();
         this.uploader.onSuccessItem = this.successItem.bind(this);
@@ -270,8 +284,9 @@ export class CourseComponent implements OnInit {
         // console.log(this.fileUploadhe.nativeElement);
         // this.fileUploadhe.nativeElement.click();
     }
-    fileAllUp(): any {
-        this.uploader.uploadAll();
+    fileAllUp(upload): any {
+        console.log(upload);
+        upload.uploadAll();
     }
     fileAllCancel(): any {
         this.uploader.cancelAll();
@@ -305,5 +320,16 @@ export class CourseComponent implements OnInit {
             // 上传文件后获取服务器返回的数据错误  
         }
         console.info(" for " + item.file.name + " status " + status);
+    }
+
+    //资源*----------------------------------------------------------------------------------------
+
+    openRecourcesModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
+
+    addURL() {
+        this.modalRef.hide();
+        //提交新的URL资源
     }
 }

@@ -46,43 +46,46 @@
 <button class="btn btn-primary" (click)="openModal(addShortanswerTemplate)">添加简答题</button>
 -->
 <div *ngFor="let q of questions; let i = index" class="row justify-content-center">
-  <div *ngIf="q.type=='MULTIPLE_CHOICE'" class="card box-shadow" style="width: 45rem; margin: 10px;">
-    <div class="card-header">
-      <h2>{{i+1}}. {{q.description}}</h2>
+
+<div #test >test</div>
+
+    <div *ngIf="q.type=='MULTIPLE_CHOICE'" class="card box-shadow" style="width: 45rem; margin: 10px;">
+      <div class="card-header">
+        <h2>{{i+1}}. {{q.description}}</h2>
+      </div>
+      <div class="card-body">
+        <form class="form-ans" (ngSubmit)="form.form.valid && answerQuestion(q)" #form="ngForm">
+          <div *ngFor="let op of q.choices; let j=index">
+            <input *ngIf="userType=='STUDENT' && q.submit=='false'" type="radio" name="radiobox" (change)="setAnswer(q, op.key)">{{op.key}}. {{op.value}}
+          </div>
+          <div *ngIf="userType=='STUDENT'">
+            <input *ngIf=" q.submit=='false'" type="submit" name="confirm" class="btn btn-primary" value="回答">
+            <input *ngIf=" q.submit=='true'" type="button" name="confirmed" class="btn btn-primary" disabled value="已回答: {{q.answer}}">
+          </div>
+  
+        </form>
+      </div>
+      <div *ngIf="userType=='TEACHER'" class="card-footer">
+        正确率：
+      </div>
+  
     </div>
-    <div class="card-body">
-      <form class="form-ans" (ngSubmit)="form.form.valid && answerQuestion(q)" #form="ngForm">
-        <div *ngFor="let op of q.choices; let j=index">
-          <input *ngIf="userType=='STUDENT' && q.submit=='false'" type="radio" name="radiobox" (change)="setAnswer(q, op.key)">{{op.key}}. {{op.value}}
+  
+    <div *ngIf="q.type=='SHORT_ANSWER'" class="card box-shadow" style="width: 45rem; margin: 10px;">
+      <div class="card-header">
+        <h2>{{i+1}}. {{q.description}}</h2>
+      </div>
+      <div class="card-body">
+        <form *ngIf="userType=='STUDENT' && q.submit=='false'" class="form-ans" (ngSubmit)="form.form.valid && answerQuestion(q)" #form="ngForm">
+          <textarea rows="6" cols="63" required name="answer" [(ngModel)]="q.answer"></textarea>
+          <br>
+          <input type="submit" name="confirm" class="btn btn-primary" value="回答">
+        </form>
+        <div *ngIf="userType == 'STUDENT' && q.answer != ''">
+          <p>{{q.answer}}</p>
+          <input type="button" name="confirmed" class="btn btn-primary" disabled value="已回答">
         </div>
-        <div *ngIf="userType=='STUDENT'">
-          <input *ngIf=" q.submit=='false'" type="submit" name="confirm" class="btn btn-primary" value="回答">
-          <input *ngIf=" q.submit=='true'" type="button" name="confirmed" class="btn btn-primary" disabled value="已回答: {{q.answer}}">
-        </div>
-
-      </form>
-    </div>
-    <div *ngIf="userType=='TEACHER'" class="card-footer">
-      正确率：
-    </div>
-
-  </div>
-
-  <div *ngIf="q.type=='SHORT_ANSWER'" class="card box-shadow" style="width: 45rem; margin: 10px;">
-    <div class="card-header">
-      <h2>{{i+1}}. {{q.description}}</h2>
-    </div>
-    <div class="card-body">
-      <form *ngIf="userType=='STUDENT' && q.submit=='false'" class="form-ans" (ngSubmit)="form.form.valid && answerQuestion(q)" #form="ngForm">
-        <textarea rows="6" cols="63" required name="answer" [(ngModel)]="q.answer"></textarea>
-        <br>
-        <input type="submit" name="confirm" class="btn btn-primary" value="回答">
-      </form>
-      <div *ngIf="userType == 'STUDENT' && q.answer != ''">
-        <p>{{q.answer}}</p>
-        <input type="button" name="confirmed" class="btn btn-primary" disabled value="已回答">
       </div>
     </div>
+  
   </div>
-
-</div>

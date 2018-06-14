@@ -17,7 +17,8 @@ export class UserService {
         console.log(user);
         this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {
             console.dir(data);
-            localStorage.setItem('currentUsr', JSON.stringify(data));
+            console.log(data['_body']);
+            // localStorage.setItem('currentUsr', JSON.stringify(data));
         }, function (err) {
             console.dir(err);
         });

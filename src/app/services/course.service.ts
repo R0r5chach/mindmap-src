@@ -21,7 +21,8 @@ export class CourseService {
 
     //GET 
     listCoursesOfUser() {
-        let url = '/acount/courses';
+        let url = 'http://10.222.174.42:8080/acount/courses';
+        
     }
 
     //GET

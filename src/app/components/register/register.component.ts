@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationExtras } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
-import { Router,  NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -9,12 +10,33 @@ import { Router,  NavigationExtras } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private router:Router) { }
+  user: any = {};
+  passwordAgain: string;
+  constructor(private router: Router, private userservice: UserService) { }
 
   ngOnInit() {
+    this.user = {
+      email: '',
+      name: '',
+      password: '',
+      type: 'STUDENT'
+    };
   }
 
-  register(){
+  setTypeStu() {
+    this.user.type = 'STUDENT';
+  }
+
+  setTypeTec() {
+    this.user.type = 'TEACHER';
+  }
+
+  register() {
+    console.dir(this.user);
     this.router.navigate(['login']);
+
+    //与服务器端通信，确认是否注册成功
+    this.userservice.register(this.user);
+
   }
 }

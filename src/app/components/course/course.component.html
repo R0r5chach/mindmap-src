@@ -1,49 +1,240 @@
-<!-- <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" href="#">思维导图</a>
-    </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="#">作业</a>
-        <a class="dropdown-item" href="#">选择题1</a>
-        <a class="dropdown-item" href="#">简答题2</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">选择题3</a>
-      </div>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">课件</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link disabled" href="#">资源</a>
-    </li>
-  </ul> -->
+<div class="row" style="min-height: 1000px">
 
+    <div *ngIf="sidebarType == 0" class="col-md-2" style="text-align:center">
+        <div class="my-nav">
+            <div class="nav-top">
+                <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
+                    <img src="../../../assets/mini.png">
+                </div>
+            </div>
+            <ul>
+                <li class="nav-item">
+                    <a href="javascript:;">
+                        <i class="my-icon nav-icon icon_1"></i>
+                        <span>导图切换</span>
+                        <i class="my-icon nav-more"></i>
+                    </a>
+                    <ul>
+                        <li *ngFor="let item of graphs">
+                            <a href="javascript:;" (click)="changeGraph(item)">
+                                <span>{{item.name}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:;" (click)="prtScn()">
+                        <i class="my-icon nav-icon icon_2"></i>
+                        <span>导图截图</span>
+                        <i class="my-icon nav-more" (click)="prtScn()"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
 
+                    <a href="javascript:;" (click)="openAddCourseWindow(addCourseTemplate)">
+                        <i class="my-icon nav-icon icon_2"></i>
+                        <span>导图创建</span>
+                        <i class="my-icon nav-more"></i>
+                    </a>
+                    <!--弹窗输入思维导图名字-->
+                    <ng-template #addCourseTemplate>
+                        <div class="modal-header">
+                            <h4 class="modal-title pull-left">新思维导图</h4>
+                            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" id="newGraph" [(ngModel)]="newGraph.name" class="form-control" placeholder="思维导图" required autofocus>
 
-
-
-<div class="row">
-  <div class="col-md-10">
-    <router-outlet></router-outlet>
-  </div>
-  <div class="col-md-2">
-      <h2>高级Web</h2>
-      <ul class="nav nav-tabs  flex-column">
-        <li class="nav-item">
-          <a routerLink="mindmap" class="nav-link">思维导图</a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="homework" class="nav-link">作业</a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="slides" class="nav-link">课件</a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="resource" class="nav-link">资源</a>
-        </li>
-      </ul>
+                            <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="cancelAdd()">取消</button>
+                            <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="confirmAdd()">确认</button>
+                        </div>
+                    </ng-template>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:;">
+                        <i class="my-icon nav-icon icon_3"></i>
+                        <span>额外操作</span>
+                        <i class="my-icon nav-more"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="javascript:;" (click)="save()">
+                                <span>保存</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span>打个酱油</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span>也打酱油</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-  
+
+    <div *ngIf="sidebarType == 1" class="col-md-2" style="text-align:center">
+        <div class="my-nav">
+            <div class="nav-top">
+                <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
+                    <img src="../../../assets/mini.png">
+                </div>
+            </div>
+            <ul>
+                <li class="nav-item">
+                    <a href="javascript:;">
+                        <i class="my-icon nav-icon icon_3"></i>
+                        <span>新增题目</span>
+                        <i class="my-icon nav-more"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="javascript:;" (click)="openModal(addMultichoiceTemplate)">
+                                <span>选择题</span>
+                            </a>
+                        </li>
+                        <ng-template #addMultichoiceTemplate>
+                            <div class="modal-header">
+                              <h4 class="modal-title pull-left">新选择题</h4>
+                              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form class="form-newMulti" (ngSubmit)="form.form.valid && addMultichoice()" #form="ngForm">
+                                <input type="text" name="title" [(ngModel)]="homeworkContent.newMultichoice.description" class="form-control" placeholder="问题描述" required
+                                  autofocus>
+                                <input type="text" name="op1" [(ngModel)]="homeworkContent.newMultichoice.choices[0].value" class="form-control" placeholder="选项A" required>
+                                <input type="text" name="op2" [(ngModel)]="homeworkContent.newMultichoice.choices[1].value" class="form-control" placeholder="选项B" required>
+                                <input type="text" name="op3" [(ngModel)]="homeworkContent.newMultichoice.choices[2].value" class="form-control" placeholder="选项C" required>
+                                <input type="text" name="op4" [(ngModel)]="homeworkContent.newMultichoice.choices[3].value" class="form-control" placeholder="选项D" required> 正确答案
+                          
+                                <input type="radio" name="radiobox" checked="true" (click)="setMultianswer('A')"> A
+                                <input type="radio" name="radiobox" (click)="setMultiAnswer('B')"> B
+                                <input type="radio" name="radiobox" (click)="setMultiAnswer('C')"> C
+                                <input type="radio" name="radiobox" (click)="setMultiAnswer('D')"> D
+                                <br>
+                                <input type="button" name="cancel" class="btn btn-default" value="取消" (click)="cancelAddQuestion()">
+                                <input type="submit" name="confirm" class="btn btn-primary" value="确认">
+                              </form>
+                            </div>
+                          </ng-template>
+                          
+                          <li>
+                            <a href="javascript:;" (click)="openModal(addShortanswerTemplate)">
+                                <span>简答题</span>
+                            </a>
+                        </li>
+                          <ng-template #addShortanswerTemplate>
+                            <div class="modal-header">
+                              <h4 class="modal-title pull-left">新简答题</h4>
+                              <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form class="form-signin" (ngSubmit)="form.form.valid && addShortanswer()" #form="ngForm">
+                                <input type="text" name="title" [(ngModel)]="homeworkContent.newShortanswer.description" class="form-control" placeholder="问题描述" required
+                                  autofocus>
+                                <input type="button" class="btn btn-default" name="cancel" value="取消" (click)="cancelAddQuestion()">
+                                <input type="submit" class="btn btn-primary" name="confirm" value="确认">
+                              </form>
+                            </div>
+                          </ng-template>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div *ngIf="sidebarType == 2" class="col-md-2" style="text-align:center">
+        <div class="my-nav">
+            <div class="nav-top">
+                <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
+                    <img src="../../../assets/mini.png">
+                </div>
+            </div>
+            <ul>
+                <li class="nav-item">
+                    <a href="javascript:;">
+                        <i class="my-icon nav-icon icon_3"></i>
+                        <span>新增题目</span>
+                        <i class="my-icon nav-more"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="javascript:;">
+                                <span>选择题</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span>填空题</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span>简答题</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div *ngIf="sidebarType == 3" class="col-md-2" style="text-align:center">
+        <div class="my-nav">
+            <div class="nav-top">
+                <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
+                    <img src="../../../assets/mini.png">
+                </div>
+            </div>
+            <ul>
+                <li class="nav-item">
+                    <a href="javascript:;">
+                        <i class="my-icon nav-icon icon_3"></i>
+                        <span>新增资源</span>
+                        <i class="my-icon nav-more"></i>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="javascript:;">
+                                <span>链接</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span>文件</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-10" style="padding: 0px">
+        <tabset>
+            <tab heading="思维导图" (select)="setSidebar(0)">
+                <app-mindmap [currentId]="nodeId" (change)="changeStatus($event)"></app-mindmap>
+            </tab>
+            <tab *ngIf="nodeId != null" heading="作业" (select)="setSidebar(1)">
+                <app-homework></app-homework>
+            </tab>
+            <tab *ngIf="nodeId != null" heading="课件" (select)="setSidebar(2)">
+                <app-lecture></app-lecture>
+            </tab>
+            <tab *ngIf="nodeId != null" heading="资源" (select)="setSidebar(3)">
+                <app-resource></app-resource>
+            </tab>
+        </tabset>
+    </div>
 </div>

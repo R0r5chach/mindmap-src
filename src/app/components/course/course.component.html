@@ -31,7 +31,7 @@
                 </li>
                 <li class="nav-item">
 
-                    <a href="javascript:;" (click)="openAddCourseWindow(addCourseTemplate)">
+                    <a *ngIf="userType=='TEACHER'" href="javascript:;" (click)="openAddCourseWindow(addCourseTemplate)">
                         <i class="my-icon nav-icon icon_2"></i>
                         <span>导图创建</span>
                         <i class="my-icon nav-more"></i>
@@ -52,7 +52,7 @@
                         </div>
                     </ng-template>
                 </li>
-                <li class="nav-item">
+                <li *ngIf="userType=='TEACHER'" class="nav-item">
                     <a href="javascript:;">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>额外操作</span>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <ul>
-                <li class="nav-item">
+                <li *ngIf="userType=='TEACHER'" class="nav-item">
                     <a href="javascript:;">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>新增题目</span>
@@ -167,7 +167,7 @@
             </div>
             <ul>
                 <li class="nav-item">
-                    <a href="javascript:;" (click)="lgModal.show()">
+                    <a *ngIf="userType=='TEACHER'" href="javascript:;" (click)="lgModal.show()">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>新增课件</span>
                         <i class="my-icon nav-more"></i>
@@ -276,7 +276,7 @@
             </div>
             <ul>
                 <li class="nav-item">
-                    <a href="javascript:;">
+                    <a *ngIf="userType=='TEACHER'" href="javascript:;">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>新增资源</span>
                         <i class="my-icon nav-more"></i>

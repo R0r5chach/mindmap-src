@@ -15,6 +15,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 
 export class CourseComponent implements OnInit {
+    userType = this.storage.getItem("userType");
+
     uploader: FileUploader = new FileUploader({
         url: "http://10.222.174.42:8080" + "/lectures",
         method: "POST",
@@ -24,13 +26,13 @@ export class CourseComponent implements OnInit {
 
     @ViewChild(MindmapComponent) child: MindmapComponent;
     @ViewChild(HomeworkComponent) homework: HomeworkComponent;
-    @ViewChild("firstdiv",{read: ElementRef}) private fileUploadhe: ElementRef;
+    @ViewChild("firstdiv", { read: ElementRef }) private fileUploadhe: ElementRef;
 
 
     ngAfterViewInit() {
         //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
         //Add 'implements AfterViewInit' to the class.
-        
+
     }
     modalRef: BsModalRef;
     newGraph = { id: "", name: "" };
@@ -83,9 +85,9 @@ export class CourseComponent implements OnInit {
             itemAlias: "uploadedfile",
             autoUpload: false
         }),
-        URL:{
-            name:"",
-            location:""
+        URL: {
+            name: "",
+            location: ""
         }
     }
 

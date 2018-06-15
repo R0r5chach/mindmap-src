@@ -5,6 +5,14 @@
 
   <div class="card-body">
     <p>{{lec.description}}</p>
-    <button class="btn btn-primary" (click)="downloadLecture(lec.lid)">下载</button>
+    <button type="button"
+        fileSaver
+        [method]="'GET'"
+        [fileName]="lec.title"
+        [url]="'https://www.npmjs.com/package/ngx-filesaver'"
+        [header]="{ }"
+        [query]="{ pi: 1, name: 'demo' }"
+        (success)="onSuc($event)"
+        (error)="onErr($event)">下载</button>
   </div>
 </div>

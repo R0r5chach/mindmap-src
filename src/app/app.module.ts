@@ -11,6 +11,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CommonModule } from '@angular/common';
 import { FileUploadModule } from 'ng2-file-upload';
+import { FileSaverModule } from 'ngx-filesaver';
+
 
 
 //引入组件
@@ -61,7 +63,8 @@ import { ResourceComponent } from './components/resource/resource.component';
     TabsModule.forRoot(),
     AccordionModule.forRoot(),
     CommonModule,
-    FileUploadModule
+    FileUploadModule,
+    FileSaverModule
   ],
   providers: [
     MyHttpService,

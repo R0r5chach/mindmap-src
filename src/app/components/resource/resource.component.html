@@ -5,8 +5,15 @@
 
   <div *ngIf="res.type=='FILE'" class="card-body">
     <p>{{res.description}}</p>
-    <button class="btn btn-primary" (click)="downloadResource(res.rid)">下载</button>
-  </div>
+    <button type="button"
+    fileSaver
+    [method]="'GET'"
+    [fileName]="res.name"
+    [url]="'https://www.npmjs.com/package/ngx-filesaver'"
+    [header]="{ }"
+    [query]="{ pi: res.rid }"
+    (success)="onSuc($event)"
+    (error)="onErr($event)">下载</button>  </div>
 
   <div *ngIf="res.type=='LINK'" class="card-body">
     <p>{{res.description}}</p>

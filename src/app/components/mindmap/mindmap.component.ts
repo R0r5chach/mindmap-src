@@ -100,6 +100,11 @@ export class MindmapComponent implements OnInit {
 
   //打印图片
   prtScn() {
+    const selected_node = this.jm.get_selected_node(); // as parent of new node
+    if (!selected_node) {
+      alert("请先选中节点");
+      return;
+    }
     this.jm.screenshot.shootDownload();
   }
 

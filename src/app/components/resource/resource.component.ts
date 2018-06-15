@@ -7,20 +7,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResourceComponent implements OnInit {
 
-  lectures = [
+  resources = [
     {
+      "type": "FILE",
       "rid": 78,
-      "title": "第一课",
+      "name": "第一课",
       "description": "这是高级web第一次课的课件"
     },
     {
+      "type": "LINK",
       "rid": 8,
-      "title": "第二课",
+      "link": "http://www.baidu.com",
+      "name": "第二课",
       "description": "这是高级web第二次课的课件"
     },
     {
+      "type": "FILE",
       "rid": 908,
-      "title": "第三课",
+      "name": "第三课",
       "description": "这是高级web第三次课的课件"
     }
   ];

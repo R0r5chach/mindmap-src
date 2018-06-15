@@ -80,7 +80,7 @@ export class MindmapComponent implements OnInit {
   removeNode() {
     const selected_id = this.jm.get_selected_node();
     if (!selected_id) {
-      console.log('please select a node first.');
+      alert("请先选中节点");
       return;
     }
     this.jm.remove_node(selected_id);
@@ -90,7 +90,7 @@ export class MindmapComponent implements OnInit {
   addNode() {
     const selected_node = this.jm.get_selected_node(); // as parent of new node
     if (!selected_node) {
-      console.log('please select a node first.');
+      alert("请先选中节点");
       return;
     }
     const nodeid = jsMind.util.uuid.newid();
@@ -127,6 +127,7 @@ export class MindmapComponent implements OnInit {
     // console.log(this.color);
     const select_node = this.jm.get_selected_node();
     if(null == select_node) {
+      alert("请先选中节点");
       return;
     }
     this.jm.set_node_color(select_node.id, this.bgColor, null);
@@ -137,6 +138,7 @@ export class MindmapComponent implements OnInit {
     // console.log(this.color);
     const select_node = this.jm.get_selected_node();
     if(null == select_node) {
+      alert("请先选中节点");
       return;
     }
     this.jm.set_node_color(select_node.id, null, this.fgColor);
@@ -185,5 +187,7 @@ export class MindmapComponent implements OnInit {
       this.jm.show(graghDates[graphId]);
     }
   }
+
+  //修改节点信息前判断是否有节点被选中
 }
 

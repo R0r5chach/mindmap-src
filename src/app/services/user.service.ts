@@ -14,7 +14,6 @@ export class UserService {
         let url = 'http://10.222.174.42:8080/users';
         let body = JSON.stringify(user);
 
-        console.log(user);
         this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {
             console.dir(data);
             console.log(data['_body']);

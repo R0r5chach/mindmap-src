@@ -12,14 +12,18 @@ export class RegisterComponent implements OnInit {
 
   user: any = {};
   passwordAgain: string;
-  constructor(private router: Router, private userservice: UserService) { }
+
+  constructor(
+    private router: Router,
+    private userservice: UserService) {
+  }
 
   ngOnInit() {
     this.user = {
       email: '',
       name: '',
       password: '',
-      type: 'STUDENT'
+      type: 'TEACHER'
     };
   }
 
@@ -32,7 +36,8 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    console.dir(this.user);
+    console.log("begin to register user: ");
+    console.log(this.user);
     this.router.navigate(['login']);
 
     //与服务器端通信，确认是否注册成功

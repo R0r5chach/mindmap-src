@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
 
     let _that = this;
 
-    let url = "http://192.168.1.102:8080/token";
+    let url = "http://10.222.174.42:8080/token";
     let body = JSON.stringify(this.user);
 
     this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {

@@ -1,6 +1,8 @@
-
 import { Component, OnInit, Input, ViewChildren, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { StorageService } from '../../services/storage.service';
+import { Http, Jsonp, Headers } from '@angular/http';
+
 
 // 引入jsmind.js文件
 import * as jsMind from '../../jsmind/js/jsmind.js';
@@ -13,7 +15,7 @@ const options = {
   editable: true
 }
 // 思维导图Mindmap渲染的json文件
-let graghDates:{[key: string]: object;} = {};
+let graghDates: { [key: string]: object; } = {};
 let currentGraphID;
 let mind = {
   "meta": {
@@ -63,7 +65,7 @@ let mind = {
 })
 
 export class MindmapComponent implements OnInit {
-  @Input() currentId = -1;
+  @Input() curNodeId = -1;
   @Output() change: EventEmitter<number> = new EventEmitter<number>();
   public title = 'mindmap';
   // mindMap;
@@ -71,9 +73,15 @@ export class MindmapComponent implements OnInit {
   public fgColor = "#ffffff";
   public bgColor = "#000000";
 
+  constructor(
+    private http: Http,
+    private storage: StorageService) {
+  }
+
+
   //初始化
   ngOnInit() {
-    this.jm = new jsMind(options); 
+    this.jm = new jsMind(options);
   }
 
   //移除节点
@@ -112,6 +120,9 @@ export class MindmapComponent implements OnInit {
   createGraph(id) {
     currentGraphID = id;
     console.log("create");
+    const rootId = "root" + jsMind.util.uuid.newid();
+    console.log(rootId);
+
     const newmindda = {
       "meta": {
         "name": "jsMind remote",
@@ -120,7 +131,7 @@ export class MindmapComponent implements OnInit {
       },
       "format": "node_tree",
       "data": {
-        "id": "root", "topic": "根目录", "children": []
+        "id": rootId, "topic": "根目录", "children": []
       }
     };
     graghDates[id] = newmindda;
@@ -131,7 +142,7 @@ export class MindmapComponent implements OnInit {
   changeColor() {
     // console.log(this.color);
     const select_node = this.jm.get_selected_node();
-    if(null == select_node) {
+    if (null == select_node) {
       alert("请先选中节点");
       return;
     }
@@ -142,7 +153,7 @@ export class MindmapComponent implements OnInit {
   changeFontColor() {
     // console.log(this.color);
     const select_node = this.jm.get_selected_node();
-    if(null == select_node) {
+    if (null == select_node) {
       alert("请先选中节点");
       return;
     }
@@ -152,47 +163,75 @@ export class MindmapComponent implements OnInit {
   //查看节点是否被选中
   checkStatus() {
     const select_node = this.jm.get_selected_node();
-    if(null == select_node) {
-      this.currentId = null;
+    if (null == select_node) {
+      this.curNodeId = null;
       console.log("nothing");
     } else {
-      this.currentId = select_node.id;
-      console.log(select_node.id);
+      this.curNodeId = select_node.id;
+      console.log(select_node);
     }
-    this.change.emit(this.currentId);
+    this.change.emit(this.curNodeId);
   }
 
   //保存思维导图
   save() {
     const data = jsMind.format.node_tree.get_data(this.jm.mind);
     graghDates[currentGraphID] = data;
-    console.log(data);
     // 将data发送至后台
+    console.log("save graph:");
+    console.log(data);
+
+    let url = "http://10.222.174.42:8080/graphs/" + currentGraphID + "/jsmind";
+    let body = JSON.stringify({ "jsmind": JSON.stringify(data) });
+
+    console.log(body);
+
+
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': this.storage.getItem('token')
+    });
+
+    let _that = this;
+    this.http.put(url, body, { headers: headers }).subscribe(function (data) {
+      console.log("save graph jsmind");
+      console.log(data['_body']);
+    }, function (err) {
+      console.dir(err);
+    });
+
   }
 
   //根据graphID切换思维导图
   getData(graphId) {
     currentGraphID = graphId;
-    if(graghDates[graphId] == null){
-      let data = {
-        "meta": {
-          "name": "jsMind remote",
-          "author": "hizzgdev@163.com",
-          "version": "0.2"
-        },
-        "format": "node_tree",
-        "data": {
-          "id": "root", "topic": "根目录", "children": []
-        }
-      };
-      data.data.topic = graphId;
-      graghDates[graphId] = data;
-      this.jm.show(data);
-    } else{
+    if (graghDates[graphId] == null) {
+      let url = "http://10.222.174.42:8080/graphs/" + currentGraphID + "/jsmind";
+  
+      let headers = new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': this.storage.getItem('token')
+      });
+  
+      let _that = this;
+      this.http.get(url, { headers: headers }).subscribe(function (data) {
+        console.log("get jsmind data from server");
+        console.log('graph id is: ' + graphId);
+        console.log(data['_body']);
+        graghDates[graphId] = JSON.parse(JSON.parse(data['_body']).jsmind); 
+        console.log(graghDates[graphId]);
+        _that.jm.show(graghDates[graphId]);
+      }, function (err) {
+        console.dir(err);
+        console.log("ERROR");
+        return;
+      });
+
+      } else {
       this.jm.show(graghDates[graphId]);
     }
   }
 
-  //修改节点信息前判断是否有节点被选中
+  //节点添加作业、课件、资源内容
 }
 

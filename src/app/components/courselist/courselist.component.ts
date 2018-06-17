@@ -135,7 +135,7 @@ export class CourselistComponent implements OnInit {
   getCourses() {
     console.log("get courses:");
 
-    let url = "http://192.168.1.102:8080/account/courses";
+    let url = "http://10.222.174.42:8080/account/courses";
     let body = JSON.stringify(this.newCourse);
     let headers = new Headers({
       'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { StorageService } from '../../services/storage.service';
+import { Http, Headers } from '@angular/http';
 
 @Component({
   selector: 'app-homework',
@@ -8,75 +9,80 @@ import { StorageService } from '../../services/storage.service';
   styleUrls: ['./homework.component.css']
 })
 export class HomeworkComponent implements OnInit {
+  @Input() curNodeId;
 
   @ViewChild('test', { read: ElementRef }) private test: ElementRef;
 
-  userType;
+  curUser;
 
   questions = [
-    {
-      "id": 1,
-      "type": "MULTIPLE_CHOICE",
-      "description": "你最喜欢哪门课？",
-      "choices": [
-        {
-          "key": "A",
-          "value": "高级Web"
-        },
-        {
-          "key": "B",
-          "value": "图形学"
-        }, {
-          "key": "C",
-          "value": "操作系统"
-        }, {
-          "key": "D",
-          "value": "软件工程"
-        }],
-      "answer": "A",
-      "submit": "true"
-    },
-    {
-      "id": 2,
-      "type": "MULTIPLE_CHOICE",
-      "description": "哪门课考试最近？",
-      "choices": [
-        {
-          "key": "A",
-          "value": "高级Web"
-        }, {
-          "key": "B",
-          "value": "图形学"
-        }, {
-          "key": "C",
-          "value": "操作系统"
-        }, {
-          "key": "D",
-          "value": "软件工程"
-        }],
-      "answer": "",
-      "submit": "false"
-    },
-    {
-      "id": 3,
-      "type": "SHORT_ANSWER",
-      "description": "今天晚饭吃什么？",
-      "answer": "",
-      "submit": "false"
-    },
-    {
-      "id": 33,
-      "type": "SHORT_ANSWER",
-      "description": "今天晚饭吃什么？",
-      "answer": "随便啊",
-      "submit": "true"
-    }
+    // {
+    //   "id": 1,
+    //   "type": "MULTIPLE_CHOICE",
+    //   "description": "你最喜欢哪门课？",
+    //   "choices": [
+    //     {
+    //       "key": "A",
+    //       "value": "高级Web"
+    //     },
+    //     {
+    //       "key": "B",
+    //       "value": "图形学"
+    //     }, {
+    //       "key": "C",
+    //       "value": "操作系统"
+    //     }, {
+    //       "key": "D",
+    //       "value": "软件工程"
+    //     }],
+    //   "answer": "A",
+    //   "submit": "true"
+    // },
+    // {
+    //   "id": 2,
+    //   "type": "MULTIPLE_CHOICE",
+    //   "description": "哪门课考试最近？",
+    //   "choices": [
+    //     {
+    //       "key": "A",
+    //       "value": "高级Web"
+    //     }, {
+    //       "key": "B",
+    //       "value": "图形学"
+    //     }, {
+    //       "key": "C",
+    //       "value": "操作系统"
+    //     }, {
+    //       "key": "D",
+    //       "value": "软件工程"
+    //     }],
+    //   "answer": "",
+    //   "submit": "false"
+    // },
+    // {
+    //   "id": 3,
+    //   "type": "SHORT_ANSWER",
+    //   "description": "今天晚饭吃什么？",
+    //   "answer": "",
+    //   "submit": "false"
+    // },
+    // {
+    //   "id": 33,
+    //   "type": "SHORT_ANSWER",
+    //   "description": "今天晚饭吃什么？",
+    //   "answer": "随便啊",
+    //   "submit": "true"
+    // }
   ];
 
-  constructor(private modalService: BsModalService, private storage: StorageService) { }
+  constructor(
+    private http: Http,
+    private modalService: BsModalService,
+    private storage: StorageService) {
+  }
 
   ngOnInit() {
-    this.userType = this.storage.getItem("userType");
+    this.curUser = this.storage.getItem("curUser");
   }
 
   setAnswer(q, ans) {
@@ -98,4 +104,29 @@ export class HomeworkComponent implements OnInit {
     }
     q.submit = "true";
   }
+
+  //从后台获取题目数据
+  getQuestions() {
+    console.log("get questions");
+
+    let url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/questions";
+    let headers = new Headers({
+      'Content-Type': 'application/json',
+      'Authorization': this.storage.getItem('token')
+    });
+
+    let _that = this;
+    this.http.get(url, { headers: headers }).subscribe(function (data) {
+      console.dir(data);
+      console.log(data['_body']);
+      _that.questions = JSON.parse(data['_body']);
+
+    }, function (err) {
+      console.dir(err);
+    });
+  }
+
+
+
+
 }

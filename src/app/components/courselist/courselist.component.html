@@ -16,7 +16,7 @@
       <div class="card-body">
         <p class="card-title pricing-card-title">教师：{{course.teacher_name}}</p>
         <p class="card-title pricing-card-title">课程人数：{{course.student_num}}</p>
-        <a class="card-link" routerLink="/course"  queryParams="{cid:course.id}">进入课程 &raquo;</a>
+        <a class="card-link" [routerLink]="['/course']"  [queryParams]="{cid:course.id}">进入课程 &raquo;</a>
       </div>
     </div>
   </div>

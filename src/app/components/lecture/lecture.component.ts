@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Http, Jsonp, Headers } from '@angular/http';
 import { RequestOptions, Request, RequestMethod } from '@angular/http';
 
@@ -12,7 +12,8 @@ import 'rxjs/Rx';
   styleUrls: ['./lecture.component.css']
 })
 export class LectureComponent implements OnInit {
-  myToken;
+  @Input() curNodeId;
+
   lectures = [
     {
       "lid": 78,
@@ -48,6 +49,7 @@ export class LectureComponent implements OnInit {
   }
 
   onErr(e) {
+    console.log(this.curNodeId);
     alert("failer");
     console.log(e);
   }

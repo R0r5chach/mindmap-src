@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-resource',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./resource.component.css']
 })
 export class ResourceComponent implements OnInit {
+  @Input() curNodeId;
 
   resources = [
     {

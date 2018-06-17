@@ -3,7 +3,9 @@ import { MindmapComponent } from '../mindmap/mindmap.component';
 import { HomeworkComponent } from '../homework/homework.component';
 import { FileUploader } from 'ng2-file-upload';
 import { FileItem } from 'ng2-file-upload';
-import { ActivatedRoute, Params} from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Http, Jsonp, Headers } from '@angular/http';
+
 
 
 import { StorageService } from '../../services/storage.service';
@@ -17,7 +19,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 })
 
 export class CourseComponent implements OnInit {
-    userType = this.storage.getItem("userType");
+    curUser = this.storage.getItem("curUser");
+    courseId;
+
 
     uploader: FileUploader = new FileUploader({
         url: "http://10.222.174.42:8080" + "/lectures",
@@ -37,23 +41,47 @@ export class CourseComponent implements OnInit {
 
     }
     modalRef: BsModalRef;
-    newGraph = { id: "", name: "" };
+    newGraph = {
+        name: "",
+        description: "",
+        jsmind: ""
+    };
 
-    nodeId = null;
+    curNodeId = null;
     sidebarType = 0;
     index = "hello";
 
     constructor(
-        private routerIonfo:ActivatedRoute,
+        private http: Http,
+        private routerIonfo: ActivatedRoute,
         private modalService: BsModalService,
-        private storage: StorageService) { }
+        private storage: StorageService) {
+    }
 
-    public graphs = [{ id: "1", name: "思维导图一" }, { id: "2", name: "思维导图二" }, { id: "3", name: "思维导图三" }, { id: "4", name: "思维导图四" }];
+    public graphs = [
+        {
+            "name": "思维导图一",
+            "id": 1,
+            "description": "思维导图01"
+        }, {
+            "name": "思维导图二",
+            "id": 2,
+            "description": "思维导图02"
+        }, {
+            "name": "思维导图三",
+            "id": 3,
+            "description": "思维导图03"
+        }, {
+            "name": "思维导图四",
+            "id": 4,
+            "description": "思维导图04"
+        }
+    ];
 
     homeworkContent = {
         newMultichoice: {
-            "type": "MULTIPLE_CHOICE",
             "description": "",
+            "type": "MULTIPLE_CHOICE",
             "choices": [
                 {
                     "key": "A",
@@ -84,8 +112,9 @@ export class CourseComponent implements OnInit {
 
     recourcesContent = {
         uploader: new FileUploader({
-            url: "http://10.222.174.42:8080" + "/lectures",
+            url: "http://10.222.174.42:8080/nodes/" + "root40c570ed2c787d8a" + "/resources",
             method: "POST",
+            headers:[],
             itemAlias: "uploadedfile",
             autoUpload: false
         }),
@@ -96,9 +125,12 @@ export class CourseComponent implements OnInit {
     }
 
     ngOnInit() {
-        let cid = this.routerIonfo.snapshot.queryParams["cid"];
+        this.courseId = this.routerIonfo.snapshot.queryParams["cid"];
         console.log("get course id");
-        console.log(cid);
+        console.log(this.courseId);
+
+        this.getGraphs();
+
         this.startJquery();
         this.uploader.onSuccessItem = this.successItem.bind(this);
         this.uploader.onAfterAddingFile = this.afterAddFile;
@@ -122,7 +154,7 @@ export class CourseComponent implements OnInit {
 
 
     changeStatus(event) {
-        this.nodeId = event;
+        this.curNodeId = event;
     }
 
     save() {
@@ -170,12 +202,57 @@ export class CourseComponent implements OnInit {
     confirmAdd() {
         this.modalRef.hide();
         //发送请求，获取id
-        this.newGraph.id = "newid";
-        this.graphs.push({ id: this.newGraph.id, name: this.newGraph.name });
-        this.child.createGraph(this.newGraph.id);
+        // this.newGraph.id = "newid";
+        // this.graphs.push({ id: this.newGraph.id, name: this.newGraph.name });
+        // this.child.createGraph(this.newGraph.id);
         //发送请求
         console.log(this.newGraph);
     }
+
+    getGraphs() {
+        console.log("get all graphs:");
+
+        let url = "http://10.222.174.42:8080/courses/" + this.courseId + "/graphs";
+
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': this.storage.getItem('token')
+        });
+
+        let _that = this;
+        this.http.get(url, { headers: headers }).subscribe(function (data) {
+            console.log("all graph meta_data");
+            console.log(data['_body']);
+            _that.graphs = JSON.parse(data['_body']);
+        }, function (err) {
+            console.dir(err);
+        });
+    }
+
+    addNewGraph() {
+        console.log("add graph:");
+        console.log(this.newGraph);
+
+        let url = "http://10.222.174.42:8080/courses/" + this.courseId + "/graphs";
+        let body = JSON.stringify(this.newGraph);
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': this.storage.getItem('token')
+        });
+
+        let _that = this;
+        this.http.post(url, body, { headers: headers }).subscribe(function (data) {
+            console.log("new graph meta");
+            console.log(data['_body']);
+            let jsonData = JSON.parse(data['_body']);
+            _that.graphs.push(jsonData);
+            _that.child.getData(jsonData.id);
+            _that.modalRef.hide();
+        }, function (err) {
+            console.dir(err);
+        });
+    }
+
 
 
     //作业部分方法--------------------------------------------------------------
@@ -186,6 +263,24 @@ export class CourseComponent implements OnInit {
     addMultichoice() {
         this.modalRef.hide();
         //发送网络请求
+        console.log("add questions");
+
+        let url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/questions";
+        let body = JSON.stringify(this.homeworkContent.newMultichoice);
+        let headers = new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': this.storage.getItem('token')
+        });
+
+        let _that = this;
+        this.http.post(url, body, { headers: headers }).subscribe(function (data) {
+            console.dir(data);
+            console.log(data['_body']);
+        }, function (err) {
+            console.dir(err);
+        });
+
+
 
         console.log(this.homeworkContent.newMultichoice);
         this.clearQuestion();
@@ -341,4 +436,9 @@ export class CourseComponent implements OnInit {
         this.modalRef.hide();
         //提交新的URL资源
     }
+
+
+
+
+
 }

@@ -31,7 +31,7 @@
                 </li>
                 <li class="nav-item">
 
-                    <a *ngIf="userType=='TEACHER'" href="javascript:;" (click)="openAddCourseWindow(addCourseTemplate)">
+                    <a *ngIf="curUser.type=='TEACHER'" href="javascript:;" (click)="openAddCourseWindow(addCourseTemplate)">
                         <i class="my-icon nav-icon icon_2"></i>
                         <span>导图创建</span>
                         <i class="my-icon nav-more"></i>
@@ -45,14 +45,17 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <input type="text" id="newGraph" [(ngModel)]="newGraph.name" class="form-control" placeholder="思维导图" required autofocus>
+                            <form (ngSubmit)="form.form.valid && addNewGraph()" #form="ngForm">
+                                <input type="text" name="newGraphName" [(ngModel)]="newGraph.name" class="form-control" placeholder="名字" required autofocus>
+                                <input type="text" name="newGraphDes" [(ngModel)]="newGraph.description" class="form-control" placeholder="描述" required>
 
-                            <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="cancelAdd()">取消</button>
-                            <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="confirmAdd()">确认</button>
+                                <input type="button" class="btn btn-default" name="cancel" popover="Vivamus sagittis" (click)="cancelAdd()" value="取消">
+                                <input type="submit" class="btn btn-primary" name="confirm" tooltip="Vivamus sagittis" value="确认">
+                            </form>
                         </div>
                     </ng-template>
                 </li>
-                <li *ngIf="userType=='TEACHER'" class="nav-item">
+                <li *ngIf="curUser.type=='TEACHER'" class="nav-item">
                     <a href="javascript:;">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>额外操作</span>
@@ -88,7 +91,7 @@
                 </div>
             </div>
             <ul>
-                <li *ngIf="userType=='TEACHER'" class="nav-item">
+                <li *ngIf="curUser.type=='TEACHER'" class="nav-item">
                     <a href="javascript:;">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>新增题目</span>
@@ -276,7 +279,7 @@
             </div>
             <ul>
                 <li class="nav-item">
-                    <a *ngIf="userType=='TEACHER'" href="javascript:;">
+                    <a *ngIf="curUser.type=='TEACHER'" href="javascript:;">
                         <i class="my-icon nav-icon icon_3"></i>
                         <span>新增资源</span>
                         <i class="my-icon nav-more"></i>
@@ -409,16 +412,16 @@
     <div class="col-md-10" style="padding: 0px">
         <tabset>
             <tab heading="思维导图" (select)="setSidebar(0)">
-                <app-mindmap [currentId]="nodeId" (change)="changeStatus($event)"></app-mindmap>
+                <app-mindmap [curNodeId]="curNodeId" (change)="changeStatus($event)"></app-mindmap>
             </tab>
-            <tab *ngIf="nodeId != null" heading="作业" (select)="setSidebar(1)">
-                <app-homework></app-homework>
+            <tab *ngIf="curNodeId != null" heading="作业" (select)="setSidebar(1)">
+                <app-homework [curNodeId]="curNodeId"></app-homework>
             </tab>
-            <tab *ngIf="nodeId != null" heading="课件" (select)="setSidebar(2)">
-                <app-lecture></app-lecture>
+            <tab *ngIf="curNodeId != null" heading="课件" (select)="setSidebar(2)">
+                <app-lecture [curNodeId]="curNodeId"></app-lecture>
             </tab>
-            <tab *ngIf="nodeId != null" heading="资源" (select)="setSidebar(3)">
-                <app-resource></app-resource>
+            <tab *ngIf="curNodeId != null" heading="资源" (select)="setSidebar(3)">
+                <app-resource [curNodeId]="curNodeId"></app-resource>
             </tab>
         </tabset>
     </div>

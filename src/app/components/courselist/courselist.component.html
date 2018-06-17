@@ -3,8 +3,8 @@
     <div class="container">
       <h2>课程列表</h2>
       <p>Hi，下列是你的课程列表</p>
-      <button *ngIf="userType == 'TEACHER'" type="button" class="btn btn-primary" (click)="openAddCourseWindow(addCourseTemplate)">添加课程</button>
-      <button *ngIf="userType == 'STUDENT'" type="button" class="btn btn-primary" (click)="openChooseCourseWindow(chooseCourseTemplate)">选课</button>
+      <button *ngIf="curUser.type == 'TEACHER'" type="button" class="btn btn-primary" (click)="openAddCourseWindow(addCourseTemplate)">添加课程</button>
+      <button *ngIf="curUser.type == 'STUDENT'" type="button" class="btn btn-primary" (click)="openChooseCourseWindow(chooseCourseTemplate)">选课</button>
     </div>
   </div>
 
@@ -14,8 +14,9 @@
         <h2 class="my-0 font-weight-normal">{{course.code}} {{course.name}}</h2>
       </div>
       <div class="card-body">
+        <p class="card-title pricing-card-title">教师：{{course.teacher_name}}</p>
         <p class="card-title pricing-card-title">课程人数：{{course.student_num}}</p>
-        <a class="card-link" routerLink="/course">进入课程 &raquo;</a>
+        <a class="card-link" routerLink="/course"  queryParams="{cid:course.id}">进入课程 &raquo;</a>
       </div>
     </div>
   </div>
@@ -30,11 +31,14 @@
     </button>
   </div>
   <div class="modal-body">
-    <input type="text" id="courseName" [(ngModel)]="newCourse.name" class="form-control" placeholder="课程名称" required autofocus>
-    <input type="text" id="courseID" [(ngModel)]="newCourse.code" class="form-control" placeholder="课程代码" required>
-
-    <button type="button" class="btn btn-default" popover="Vivamus sagittis" (click)="cancelAdd()">取消</button>
-    <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis" (click)="confirmAdd()">确认</button>
+    <form (ngSubmit)="form.form.valid && confirmAdd()" #form="ngForm">
+    <input type="text" id="courseName" name="courseName" [(ngModel)]="newCourse.name" class="form-control" placeholder="课程名称" required autofocus>
+    <br>
+    <input type="text" id="courseID" name="courseCode" [(ngModel)]="newCourse.code" class="form-control" placeholder="课程代码" required>
+    <br>
+    <input type="button" class="btn btn-default" popover="Vivamus sagittis" value="取消" (click)="cancelAdd()">
+    <input type="submit" class="btn btn-primary" tooltip="Vivamus sagittis" value="确认" style="margin-left: 10px">
+    </form>
   </div>
 </ng-template>
 
@@ -46,10 +50,26 @@
     </button>
   </div>
   <div class="modal-body">
-    <div *ngFor="let course of choosebleCourses; let i = index">
+    <div *ngFor="let course of allCourses; let i = index">
       <p> {{course.code}} {{course.name}}
-        <button class="btn btn-primary pull-right" (click)="chooseCourse(i)">选课</button>
+        <button class="btn btn-primary pull-right" (click)="openInputCourseCodeWindow(inputCourseCodeTemplate, course.id)">选课</button>
       </p>
     </div>
   </div>
+</ng-template>
+
+<ng-template #inputCourseCodeTemplate>
+<div class="modal-header">
+  <h4 class="modal-title">输入课程代码</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <form (ngSubmit)="form.form.valid && chooseCourse()" #form="ngForm">
+        <input type="text" name="code" [(ngModel)]="choosenCourse.code" class="form-control" placeholder="课程代码" required autofocus>
+        <br>
+        <input type="submit" name="confirm" class="btn btn-primary pull-right" value="选课">
+    </form>
+</div>
 </ng-template>

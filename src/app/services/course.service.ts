@@ -11,7 +11,17 @@ export class CourseService {
 
     //POST name, code, teacher_id
     create(newCourse) {
-        let url = '/courses';
+        let url = "http://192.168.1.102:8080/courses";
+
+        let body = JSON.stringify(newCourse);
+
+        this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {
+            console.dir(data);
+            console.log(data['_body']);
+
+        }, function (err) {
+            console.dir(err);
+        });
     }
 
     //DELETE
@@ -22,7 +32,7 @@ export class CourseService {
     //GET 
     listCoursesOfUser() {
         let url = 'http://10.222.174.42:8080/acount/courses';
-        
+
     }
 
     //GET

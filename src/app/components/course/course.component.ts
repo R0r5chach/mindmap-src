@@ -3,6 +3,8 @@ import { MindmapComponent } from '../mindmap/mindmap.component';
 import { HomeworkComponent } from '../homework/homework.component';
 import { FileUploader } from 'ng2-file-upload';
 import { FileItem } from 'ng2-file-upload';
+import { ActivatedRoute, Params} from '@angular/router';
+
 
 import { StorageService } from '../../services/storage.service';
 import { STRING_TYPE } from '@angular/compiler/src/output/output_ast';
@@ -41,7 +43,9 @@ export class CourseComponent implements OnInit {
     sidebarType = 0;
     index = "hello";
 
-    constructor(private modalService: BsModalService,
+    constructor(
+        private routerIonfo:ActivatedRoute,
+        private modalService: BsModalService,
         private storage: StorageService) { }
 
     public graphs = [{ id: "1", name: "思维导图一" }, { id: "2", name: "思维导图二" }, { id: "3", name: "思维导图三" }, { id: "4", name: "思维导图四" }];
@@ -92,6 +96,9 @@ export class CourseComponent implements OnInit {
     }
 
     ngOnInit() {
+        let cid = this.routerIonfo.snapshot.queryParams["cid"];
+        console.log("get course id");
+        console.log(cid);
         this.startJquery();
         this.uploader.onSuccessItem = this.successItem.bind(this);
         this.uploader.onAfterAddingFile = this.afterAddFile;

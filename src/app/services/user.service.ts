@@ -11,7 +11,7 @@ export class UserService {
 
     //POST email, name, password, type
     register(user) {
-        let url = 'http://10.222.174.42:8080/users';
+        let url = 'http://192.168.1.102:8080/users';
         let body = JSON.stringify(user);
 
         this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {

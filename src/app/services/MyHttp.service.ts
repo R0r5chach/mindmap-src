@@ -1,3 +1,4 @@
+import { StorageService } from './storage.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
@@ -8,45 +9,49 @@ import {
     Headers
 } from '@angular/http';
 
-const mergeToken = (options: RequestOptionsArgs = {}) => {
-    const newOptions = new RequestOptions({}).merge(options);
-    const newHeaders = new Headers(newOptions.headers);
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-        newHeaders.set('Authorization', jwt);
-    }
-    newOptions.headers = newHeaders;
-    return newOptions;
-};
+const baseURL = 'http://192.168.1.101:8080';
 
 @Injectable()
 export class MyHttpService {
 
-    constructor(private http: Http) {
+    constructor(
+        private http: Http,
+        private storage:StorageService
+    ) {
     }
 
-    get(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.http.get(url, mergeToken(options));
+    mergeToken = () => {
+        let newHeaders = new Headers({"Content-Type": "application/json"});
+        let token:any = this.storage.getItem("token");
+        if (token) {
+            console.log("token: " + token);
+            newHeaders.set("Authorization", token);
+        }
+        return newHeaders;
+    };
+
+    get(url: string): Observable<Response> {
+        return this.http.get(baseURL+url, {headers: this.mergeToken()});
     }
 
-    post(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
-        return this.http.post(url, body, mergeToken(options));
+    post(url: string, body: any): Observable<Response> {
+        return this.http.post(baseURL+url, body, {headers: this.mergeToken()});
     }
 
-    put(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
-        return this.http.put(url, body, mergeToken(options));
+    put(url: string, body: any): Observable<Response> {
+        return this.http.put(baseURL+url, body, {headers: this.mergeToken()});
     }
 
-    delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.http.delete(url, mergeToken(options));
+    delete(url: string): Observable<Response> {
+        return this.http.delete(baseURL+url, {headers: this.mergeToken()});
     }
 
-    patch(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
-        return this.http.patch(url, body, mergeToken(options));
+    patch(url: string, body: any): Observable<Response> {
+        return this.http.patch(baseURL+url, body, {headers: this.mergeToken()});
     }
 
-    head(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.http.head(url, mergeToken(options));
+    head(url: string): Observable<Response> {
+        return this.http.head(baseURL+url, {headers: this.mergeToken()});
     }
 
 }

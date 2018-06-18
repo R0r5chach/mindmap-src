@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication.service'
 import { StorageService } from '../../services/storage.service';
-import { Http, Jsonp, Headers } from '@angular/http';
+import { MyHttpService } from '../../services/MyHttp.service';
 
 
 @Component({
@@ -11,14 +10,11 @@ import { Http, Jsonp, Headers } from '@angular/http';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private headers = new Headers({ 'Content-Type': 'application/json' });
-
   user: any = {};
 
   constructor(
-    private http: Http,
+    private myHttp:MyHttpService,
     private router: Router,
-    private authentication: AuthenticationService,
     private storage: StorageService) {
   }
 
@@ -41,29 +37,31 @@ export class LoginComponent implements OnInit {
     console.log("begin to login: ");
     console.log(this.user);
 
-    this.storage.setItem("curUser", this.user);
+    //删除上一个token
+    if(this.storage.getItem("token")){
+      this.storage.removeItem("token");
+    }
 
-    let _that = this;
-
-    let url = "http://10.222.174.42:8080/token";
+    let url = "/token";
     let body = JSON.stringify(this.user);
 
-    this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {
-      console.dir(data);
-      console.log("get token: ");
+    let _that = this;
+    this.myHttp.post(url, body).subscribe(function (data) {
+      console.log("log in resp:");
+      console.log(data);
+      console.log("got token:");
       console.log(JSON.parse(data['_body']));
 
       console.log("set token to localStorage: ");
       let token = JSON.parse(data['_body'])["token"];
       _that.storage.setItem("token", token);
-
+      console.log("log in success, store user");
+      _that.storage.setItem("curUser", _that.user);
       _that.router.navigate(['courselist']);
 
     }, function (err) {
       console.dir(err);
     });
-
-
 
   }
 }

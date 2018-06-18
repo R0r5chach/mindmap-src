@@ -31,12 +31,12 @@
     </button>
   </div>
   <div class="modal-body">
-    <form (ngSubmit)="form.form.valid && confirmAdd()" #form="ngForm">
+    <form (ngSubmit)="form.form.valid && confirmAddCourse()" #form="ngForm">
     <input type="text" id="courseName" name="courseName" [(ngModel)]="newCourse.name" class="form-control" placeholder="课程名称" required autofocus>
     <br>
     <input type="text" id="courseID" name="courseCode" [(ngModel)]="newCourse.code" class="form-control" placeholder="课程代码" required>
     <br>
-    <input type="button" class="btn btn-default" popover="Vivamus sagittis" value="取消" (click)="cancelAdd()">
+    <input type="button" class="btn btn-default" popover="Vivamus sagittis" value="取消" (click)="cancelAddCourse()">
     <input type="submit" class="btn btn-primary" tooltip="Vivamus sagittis" value="确认" style="margin-left: 10px">
     </form>
   </div>

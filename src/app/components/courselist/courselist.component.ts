@@ -1,9 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { StorageService } from '../../services/storage.service';
-import { CourseService } from '../../services/course.service';
-import { Http, Jsonp, Headers } from '@angular/http';
+import { MyHttpService } from '../../services/MyHttp.service';
 import { element } from 'protractor';
+
 
 
 @Component({
@@ -51,10 +51,9 @@ export class CourselistComponent implements OnInit {
   }
 
   constructor(
-    private http: Http,
-    private modalService: BsModalService,
+    private myHttp: MyHttpService,
     private storage: StorageService,
-    private course: CourseService
+    private modalService: BsModalService,
   ) {
   }
 
@@ -63,7 +62,7 @@ export class CourselistComponent implements OnInit {
     console.log("current user: ");
     console.log(this.curUser);
     this.getCourses();
-    console.log("onInit");
+    console.log("all my courses:");
     console.log(this.myCourses);
   }
 
@@ -90,36 +89,48 @@ export class CourselistComponent implements OnInit {
 
   //发送选课请求，更新myCourses
   chooseCourse() {
-    this.modalRef.hide();
-    console.log("choose course:");
-    console.log(this.choosenCourse);
+    console.log("begin to choose course:");
+
+    let url="/courses/"+this.choosenCourse.id+"/students";
+    let body = JSON.stringify({"code":this.choosenCourse.code});
+
+    let _that = this;
+    this.myHttp.post(url, body).subscribe(function (data) {
+      console.log("choose course resp:");
+      console.log(data);
+      console.log(data['_body']);
+      //更新课程列表
+      _that.getCourses();
+      _that.modalRef.hide();
+    }, function (err) {
+      console.dir(err);
+    });
+
     this.choosenCourse = {
       "id": -1,
       "code": ""
     };
   }
 
-  cancelAdd() {
+  cancelAddCourse() {
     this.modalRef.hide();
   }
 
   //发送添加请求，更新myCourses
-  confirmAdd() {
+  confirmAddCourse() {
     //发送请求
     console.log("begin to add new course:");
     console.log(this.newCourse);
 
-    let url = "http://192.168.1.102:8080/courses";
+    let url = "/courses";
     let body = JSON.stringify(this.newCourse);
-    let headers = new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': this.storage.getItem('token')
-    });
 
     let _that = this;
-    this.http.post(url, body, { headers: headers }).subscribe(function (data) {
-      console.dir(data);
+    this.myHttp.post(url, body).subscribe(function (data) {
+      console.log("add course resp:");
+      console.log(data);
       console.log(data['_body']);
+      //更新课程列表
       _that.getCourses();
       _that.modalRef.hide();
     }, function (err) {
@@ -133,22 +144,17 @@ export class CourselistComponent implements OnInit {
   }
 
   getCourses() {
-    console.log("get courses:");
-
-    let url = "http://10.222.174.42:8080/account/courses";
+    console.log("begin to get courses:");
+    
+    let url = "/account/courses";
     let body = JSON.stringify(this.newCourse);
-    let headers = new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': this.storage.getItem('token')
-    });
-
+    
     let _that = this;
-    this.http.get(url, { headers: headers }).subscribe(function (data) {
-      console.dir(data);
-      console.log("get courses");
+    this.myHttp.get(url).subscribe(function (data) {
+      console.log("get courses resp:");
+      console.log(data);
       console.log(data['_body']);
       _that.myCourses = JSON.parse(data['_body']);
-      console.log(_that.myCourses);
     }, function (err) {
       console.dir(err);
     });

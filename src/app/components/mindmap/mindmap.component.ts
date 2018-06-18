@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChildren, Output, EventEmitter } from '@a
 import { FormsModule } from '@angular/forms';
 import { StorageService } from '../../services/storage.service';
 import { Http, Jsonp, Headers } from '@angular/http';
+import { MyHttpService } from '../../services/MyHttp.service';
 
 
 // 引入jsmind.js文件
@@ -75,7 +76,9 @@ export class MindmapComponent implements OnInit {
 
   constructor(
     private http: Http,
-    private storage: StorageService) {
+    private myHttp: MyHttpService,
+    private storage: StorageService
+  ){
   }
 
 
@@ -181,20 +184,13 @@ export class MindmapComponent implements OnInit {
     console.log("save graph:");
     console.log(data);
 
-    let url = "http://10.222.174.42:8080/graphs/" + currentGraphID + "/jsmind";
+    let url = "/graphs/" + currentGraphID + "/jsmind";
     let body = JSON.stringify({ "jsmind": JSON.stringify(data) });
-
     console.log(body);
 
-
-    let headers = new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': this.storage.getItem('token')
-    });
-
     let _that = this;
-    this.http.put(url, body, { headers: headers }).subscribe(function (data) {
-      console.log("save graph jsmind");
+    this.myHttp.put(url, body).subscribe(function (data) {
+      console.log("save graph resp");
       console.log(data['_body']);
     }, function (err) {
       console.dir(err);
@@ -206,15 +202,10 @@ export class MindmapComponent implements OnInit {
   getData(graphId) {
     currentGraphID = graphId;
     if (graghDates[graphId] == null) {
-      let url = "http://10.222.174.42:8080/graphs/" + currentGraphID + "/jsmind";
-  
-      let headers = new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': this.storage.getItem('token')
-      });
+      let url = "/graphs/" + currentGraphID + "/jsmind";
   
       let _that = this;
-      this.http.get(url, { headers: headers }).subscribe(function (data) {
+      this.myHttp.get(url).subscribe(function (data) {
         console.log("get jsmind data from server");
         console.log('graph id is: ' + graphId);
         console.log(data['_body']);
@@ -224,9 +215,7 @@ export class MindmapComponent implements OnInit {
       }, function (err) {
         console.dir(err);
         console.log("ERROR");
-        return;
       });
-
       } else {
       this.jm.show(graghDates[graphId]);
     }

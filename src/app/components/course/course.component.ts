@@ -7,11 +7,11 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Http, Jsonp, Headers } from '@angular/http';
 
 
-
 import { StorageService } from '../../services/storage.service';
-import { STRING_TYPE } from '@angular/compiler/src/output/output_ast';
 import * as $ from 'jquery';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MyHttpService } from '../../services/MyHttp.service';
+
 @Component({
     selector: 'app-course',
     templateUrl: './course.component.html',
@@ -38,9 +38,9 @@ export class CourseComponent implements OnInit {
     ngAfterViewInit() {
         //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
         //Add 'implements AfterViewInit' to the class.
-
     }
     modalRef: BsModalRef;
+    
     newGraph = {
         name: "",
         description: "",
@@ -53,9 +53,24 @@ export class CourseComponent implements OnInit {
 
     constructor(
         private http: Http,
+        private myHttp: MyHttpService,
         private routerIonfo: ActivatedRoute,
         private modalService: BsModalService,
         private storage: StorageService) {
+    }
+
+    ngOnInit() {
+        this.courseId = this.routerIonfo.snapshot.queryParams["cid"];
+        console.log("get course id");
+        console.log(this.courseId);
+
+        this.getGraphs();
+
+        this.startJquery();
+        this.uploader.onSuccessItem = this.successItem.bind(this);
+        this.uploader.onAfterAddingFile = this.afterAddFile;
+        this.uploader.onBuildItemForm = this.buildItemForm;
+        // this.child.getData(this.graphs[0].id);
     }
 
     public graphs = [
@@ -124,20 +139,6 @@ export class CourseComponent implements OnInit {
         }
     }
 
-    ngOnInit() {
-        this.courseId = this.routerIonfo.snapshot.queryParams["cid"];
-        console.log("get course id");
-        console.log(this.courseId);
-
-        this.getGraphs();
-
-        this.startJquery();
-        this.uploader.onSuccessItem = this.successItem.bind(this);
-        this.uploader.onAfterAddingFile = this.afterAddFile;
-        this.uploader.onBuildItemForm = this.buildItemForm;
-        // this.child.getData(this.graphs[0].id);
-    }
-
     setSidebar(type) {
         this.sidebarType = type;
         this.startJquery();
@@ -199,28 +200,13 @@ export class CourseComponent implements OnInit {
         this.modalRef.hide();
     }
 
-    confirmAdd() {
-        this.modalRef.hide();
-        //发送请求，获取id
-        // this.newGraph.id = "newid";
-        // this.graphs.push({ id: this.newGraph.id, name: this.newGraph.name });
-        // this.child.createGraph(this.newGraph.id);
-        //发送请求
-        console.log(this.newGraph);
-    }
-
     getGraphs() {
         console.log("get all graphs:");
 
-        let url = "http://10.222.174.42:8080/courses/" + this.courseId + "/graphs";
-
-        let headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': this.storage.getItem('token')
-        });
+        let url = "/courses/" + this.courseId + "/graphs";
 
         let _that = this;
-        this.http.get(url, { headers: headers }).subscribe(function (data) {
+        this.myHttp.get(url).subscribe(function (data) {
             console.log("all graph meta_data");
             console.log(data['_body']);
             _that.graphs = JSON.parse(data['_body']);
@@ -230,18 +216,14 @@ export class CourseComponent implements OnInit {
     }
 
     addNewGraph() {
-        console.log("add graph:");
+        console.log("begin to add graph:");
         console.log(this.newGraph);
 
-        let url = "http://10.222.174.42:8080/courses/" + this.courseId + "/graphs";
+        let url = "/courses/" + this.courseId + "/graphs";
         let body = JSON.stringify(this.newGraph);
-        let headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': this.storage.getItem('token')
-        });
-
+       
         let _that = this;
-        this.http.post(url, body, { headers: headers }).subscribe(function (data) {
+        this.myHttp.post(url, body).subscribe(function (data) {
             console.log("new graph meta");
             console.log(data['_body']);
             let jsonData = JSON.parse(data['_body']);
@@ -261,37 +243,44 @@ export class CourseComponent implements OnInit {
     }
 
     addMultichoice() {
-        this.modalRef.hide();
-        //发送网络请求
-        console.log("add questions");
+        console.log("begin to add multichoice questions:");
+        console.log(this.homeworkContent.newMultichoice);
 
-        let url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/questions";
+        let url = "/nodes/" + this.curNodeId + "/questions";
         let body = JSON.stringify(this.homeworkContent.newMultichoice);
-        let headers = new Headers({
-            'Content-Type': 'application/json',
-            'Authorization': this.storage.getItem('token')
-        });
 
         let _that = this;
-        this.http.post(url, body, { headers: headers }).subscribe(function (data) {
+        this.myHttp.post(url, body).subscribe(function (data) {
             console.dir(data);
             console.log(data['_body']);
+
+            //刷新子模块问题列表
+            this.modalRef.hide();
         }, function (err) {
             console.dir(err);
         });
 
-
-
-        console.log(this.homeworkContent.newMultichoice);
         this.clearQuestion();
     }
 
-
     addShortanswer() {
-        this.modalRef.hide();
-        //发送网络请求
-
+        console.log("begin to add shortanswer questions:");
         console.log(this.homeworkContent.newShortanswer);
+
+        let url = "/nodes/" + this.curNodeId + "/questions";
+        let body = JSON.stringify(this.homeworkContent.newShortanswer);
+
+        let _that = this;
+        this.myHttp.post(url, body).subscribe(function (data) {
+            console.dir(data);
+            console.log(data['_body']);
+
+            //刷新子模块问题列表
+            this.modalRef.hide();
+        }, function (err) {
+            console.dir(err);
+        });
+
         this.clearQuestion();
     }
 

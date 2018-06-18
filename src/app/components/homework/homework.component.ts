@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { StorageService } from '../../services/storage.service';
-import { Http, Headers } from '@angular/http';
+import { MyHttpService } from '../../services/MyHttp.service';
 
 @Component({
   selector: 'app-homework',
@@ -75,14 +75,18 @@ export class HomeworkComponent implements OnInit {
     // }
   ];
 
+  questionsWithStatus=[];
+
   constructor(
-    private http: Http,
+    private myHttp: MyHttpService,
     private modalService: BsModalService,
     private storage: StorageService) {
   }
 
   ngOnInit() {
     this.curUser = this.storage.getItem("curUser");
+    this.getQuestions();
+    this.initQWithStatus();
   }
 
   setAnswer(q, ans) {
@@ -93,40 +97,48 @@ export class HomeworkComponent implements OnInit {
     if (q.answer == "") {
       alert("答案不能为空！"); { }
     } else {
-
-      let body = {
-        "qid": q.qid,
-        "answer": q.answer
-      }
+      let url = "/questions/" + q.id + "/answers";
+      let body = JSON.stringify({ "answer": q.answer });
+      console.log("begin to answer question:");
       console.log(body);
-
       //http
+      let _that = this;
+      this.myHttp.post(url, body).subscribe(function (data) {
+        _that.getQuestions();
+        _that.initQWithStatus();
+      }, function (err) {
+        console.dir(err);
+      });
+
     }
-    q.submit = "true";
+    //q.answered = "true";
   }
 
   //从后台获取题目数据
   getQuestions() {
     console.log("get questions");
 
-    let url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/questions";
-    let headers = new Headers({
-      'Content-Type': 'application/json',
-      'Authorization': this.storage.getItem('token')
-    });
-
+    let url = "/nodes/" + this.curNodeId + "/questions";
+    
     let _that = this;
-    this.http.get(url, { headers: headers }).subscribe(function (data) {
+    this.myHttp.get(url).subscribe(function (data) {
       console.dir(data);
       console.log(data['_body']);
       _that.questions = JSON.parse(data['_body']);
-
     }, function (err) {
       console.dir(err);
     });
   }
 
-
-
+  initQWithStatus(){
+    this.questionsWithStatus = this.questions;
+    for(let q of this.questionsWithStatus){
+      if(q.answer == ""){
+        q.append("answered", true);
+      }else{
+        q.append("answered", false);
+      }
+    }
+  }
 
 }

@@ -17,28 +17,16 @@ export class CourselistComponent implements OnInit {
 
   myCourses = [];
 
-  allCourses = [{
-    "name": "高级web",
-    "id": 4,
-    "code": "01",
-    "teacher_name": "xiaoming",
-    "teacher_id": "2",
-    "student_num": 23
-  }, {
-    "name": "机器学习",
-    "id": 5,
-    "code": "02",
-    "teacher_name": "xiaogang",
-    "teacher_id": "3",
-    "student_num": 23
-  }, {
+  choosableCourses = [
+    {
     "name": "操作系统",
     "id": 6,
     "code": "03",
     "teacher_name": "a wei",
     "teacher_id ": "17",
     "student_num": 23
-  }];
+    }
+  ];
 
   newCourse = {
     "name": "",
@@ -101,7 +89,8 @@ export class CourselistComponent implements OnInit {
       console.log(data['_body']);
       //更新课程列表
       _that.getCourses();
-      _that.modalRef.hide();
+      _that.getChoosableCourses();
+
     }, function (err) {
       console.dir(err);
     });
@@ -155,6 +144,23 @@ export class CourselistComponent implements OnInit {
       console.log(data);
       console.log(data['_body']);
       _that.myCourses = JSON.parse(data['_body']);
+    }, function (err) {
+      console.dir(err);
+    });
+  }
+
+  getChoosableCourses(){
+    console.log("begin to get choosable courses:");
+    
+    let url = "/account/courses";
+    let body = JSON.stringify(this.newCourse);
+    
+    let _that = this;
+    this.myHttp.get(url).subscribe(function (data) {
+      console.log("get choosable courses resp:");
+      console.log(data);
+      console.log(data['_body']);
+      _that.choosableCourses = JSON.parse(data['_body']);
     }, function (err) {
       console.dir(err);
     });

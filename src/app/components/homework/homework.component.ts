@@ -15,65 +15,7 @@ export class HomeworkComponent implements OnInit {
 
   curUser;
 
-  questions = [
-    // {
-    //   "id": 1,
-    //   "type": "MULTIPLE_CHOICE",
-    //   "description": "你最喜欢哪门课？",
-    //   "choices": [
-    //     {
-    //       "key": "A",
-    //       "value": "高级Web"
-    //     },
-    //     {
-    //       "key": "B",
-    //       "value": "图形学"
-    //     }, {
-    //       "key": "C",
-    //       "value": "操作系统"
-    //     }, {
-    //       "key": "D",
-    //       "value": "软件工程"
-    //     }],
-    //   "answer": "A",
-    //   "submit": "true"
-    // },
-    // {
-    //   "id": 2,
-    //   "type": "MULTIPLE_CHOICE",
-    //   "description": "哪门课考试最近？",
-    //   "choices": [
-    //     {
-    //       "key": "A",
-    //       "value": "高级Web"
-    //     }, {
-    //       "key": "B",
-    //       "value": "图形学"
-    //     }, {
-    //       "key": "C",
-    //       "value": "操作系统"
-    //     }, {
-    //       "key": "D",
-    //       "value": "软件工程"
-    //     }],
-    //   "answer": "",
-    //   "submit": "false"
-    // },
-    // {
-    //   "id": 3,
-    //   "type": "SHORT_ANSWER",
-    //   "description": "今天晚饭吃什么？",
-    //   "answer": "",
-    //   "submit": "false"
-    // },
-    // {
-    //   "id": 33,
-    //   "type": "SHORT_ANSWER",
-    //   "description": "今天晚饭吃什么？",
-    //   "answer": "随便啊",
-    //   "submit": "true"
-    // }
-  ];
+  questions = [];
 
   questionsWithStatus=[];
 
@@ -86,7 +28,6 @@ export class HomeworkComponent implements OnInit {
   ngOnInit() {
     this.curUser = this.storage.getItem("curUser");
     this.getQuestions();
-    this.initQWithStatus();
   }
 
   setAnswer(q, ans) {
@@ -122,9 +63,12 @@ export class HomeworkComponent implements OnInit {
     
     let _that = this;
     this.myHttp.get(url).subscribe(function (data) {
-      console.dir(data);
+      console.log("get questions resp:");
       console.log(data['_body']);
       _that.questions = JSON.parse(data['_body']);
+      console.log("this.questions");
+      console.log(_that.questions);
+      _that.initQWithStatus();
     }, function (err) {
       console.dir(err);
     });
@@ -134,9 +78,9 @@ export class HomeworkComponent implements OnInit {
     this.questionsWithStatus = this.questions;
     for(let q of this.questionsWithStatus){
       if(q.answer == ""){
-        q.append("answered", true);
+        q.answered = true;
       }else{
-        q.append("answered", false);
+        q.answered = false;
       }
     }
   }

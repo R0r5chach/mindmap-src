@@ -255,7 +255,8 @@ export class CourseComponent implements OnInit {
             console.log(data['_body']);
 
             //刷新子模块问题列表
-            this.modalRef.hide();
+            _that.homework.getQuestions();
+            _that.modalRef.hide();
         }, function (err) {
             console.dir(err);
         });
@@ -276,7 +277,8 @@ export class CourseComponent implements OnInit {
             console.log(data['_body']);
 
             //刷新子模块问题列表
-            this.modalRef.hide();
+            _that.homework.getQuestions();
+            _that.modalRef.hide();
         }, function (err) {
             console.dir(err);
         });

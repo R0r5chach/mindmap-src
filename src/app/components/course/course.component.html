@@ -415,13 +415,13 @@
                 <app-mindmap [curNodeId]="curNodeId" (change)="changeStatus($event)"></app-mindmap>
             </tab>
             <tab *ngIf="curNodeId != null" heading="作业" (select)="setSidebar(1)">
-                <app-homework [curNodeId]="curNodeId"></app-homework>
+                <app-homework [curNodeId]="curNodeId" (change)="changeStatus($event)"></app-homework>
             </tab>
             <tab *ngIf="curNodeId != null" heading="课件" (select)="setSidebar(2)">
-                <app-lecture [curNodeId]="curNodeId"></app-lecture>
+                <app-lecture [curNodeId]="curNodeId" (change)="changeStatus($event)"></app-lecture>
             </tab>
             <tab *ngIf="curNodeId != null" heading="资源" (select)="setSidebar(3)">
-                <app-resource [curNodeId]="curNodeId"></app-resource>
+                <app-resource [curNodeId]="curNodeId" (change)="changeStatus($event)"></app-resource>
             </tab>
         </tabset>
     </div>

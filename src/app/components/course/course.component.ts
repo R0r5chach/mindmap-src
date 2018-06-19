@@ -43,7 +43,15 @@ export class CourseComponent implements OnInit {
     newGraph = {
         name: "",
         description: "",
-        jsmind: ""
+        jsmind: {"meta": {
+            "name": "jsMind remote",
+            "author": "hizzgdev@163.com",
+            "version": "0.2"
+          },
+          "format": "node_tree",
+          "data": {
+            "id": "root", "topic": "根目录", "children": []
+          }}
     };
     homeworkContent = {
         newMultichoice: {

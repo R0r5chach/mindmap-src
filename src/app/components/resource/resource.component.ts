@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { StorageService } from '../../services/storage.service'
+import { MyHttpService } from '../../services/MyHttp.service';
 
 @Component({
   selector: 'app-resource',
@@ -7,32 +9,33 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ResourceComponent implements OnInit {
   @Input() curNodeId;
+  token = this.storage.getItem('token');
 
-  resources = [
-    {
-      "type": "FILE",
-      "rid": 78,
-      "name": "第一课",
-      "description": "这是高级web第一次课的课件"
-    },
-    {
-      "type": "LINK",
-      "rid": 8,
-      "link": "http://www.baidu.com",
-      "name": "第二课",
-      "description": "这是高级web第二次课的课件"
-    },
-    {
-      "type": "FILE",
-      "rid": 908,
-      "name": "第三课",
-      "description": "这是高级web第三次课的课件"
-    }
-  ];
 
-  constructor() { }
+  resources = [];
+
+  constructor(
+    private storage: StorageService,
+    private myHttp: MyHttpService
+  ) { }
 
   ngOnInit() {
+  }
+
+  getResources() {
+    console.log("get resources");
+
+    let url = "/nodes/" + this.curNodeId + "/resources";
+
+    let _that = this;
+    this.myHttp.get(url).subscribe(function (data) {
+      console.log("get resources resp:");
+      console.log(data);
+      console.log(data['_body']);
+      _that.resources = JSON.parse(data['_body']);
+    }, function (err) {
+      console.dir(err);
+    });
   }
 
 }

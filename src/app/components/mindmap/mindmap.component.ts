@@ -74,6 +74,8 @@ export class MindmapComponent implements OnInit {
   public fgColor = "#ffffff";
   public bgColor = "#000000";
 
+  curUser;
+
   constructor(
     private http: Http,
     private myHttp: MyHttpService,
@@ -84,7 +86,11 @@ export class MindmapComponent implements OnInit {
 
   //初始化
   ngOnInit() {
+    this.curUser = this.storage.getItem("curUser");
     this.jm = new jsMind(options);
+    if(this.curUser.type=='STUDENT'){
+      this.jm.disable_edit();
+    }
   }
 
   //移除节点
@@ -181,17 +187,17 @@ export class MindmapComponent implements OnInit {
     const data = jsMind.format.node_tree.get_data(this.jm.mind);
     graghDates[currentGraphID] = data;
     // 将data发送至后台
-    console.log("save graph:");
-    console.log(data);
+    // console.log("save graph:");
+    // console.log(data);
 
     let url = "/graphs/" + currentGraphID + "/jsmind";
     let body = JSON.stringify({ "jsmind": JSON.stringify(data) });
-    console.log(body);
+    // console.log(body);
 
     let _that = this;
     this.myHttp.put(url, body).subscribe(function (data) {
-      console.log("save graph resp");
-      console.log(data['_body']);
+      // console.log("save graph resp");
+      // console.log(data['_body']);
     }, function (err) {
       console.dir(err);
     });
@@ -206,15 +212,15 @@ export class MindmapComponent implements OnInit {
   
       let _that = this;
       this.myHttp.get(url).subscribe(function (data) {
-        console.log("get jsmind data from server");
-        console.log('graph id is: ' + graphId);
+        // console.log("get jsmind data from server");
+        // console.log('graph id is: ' + graphId);
         console.log(data['_body']);
         graghDates[graphId] = JSON.parse(JSON.parse(data['_body']).jsmind); 
-        console.log(graghDates[graphId]);
+        // console.log(graghDates[graphId]);
         _that.jm.show(graghDates[graphId]);
       }, function (err) {
         console.dir(err);
-        console.log("ERROR");
+        // console.log("ERROR");
       });
       } else {
       this.jm.show(graghDates[graphId]);

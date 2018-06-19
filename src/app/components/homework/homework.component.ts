@@ -27,7 +27,7 @@ export class HomeworkComponent implements OnInit {
 
   ngOnInit() {
     this.curUser = this.storage.getItem("curUser");
-    this.getQuestions();
+    this.initQWithStatus();
   }
 
   setAnswer(q, ans) {

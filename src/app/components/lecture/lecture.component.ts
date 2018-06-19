@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Http, Jsonp, Headers } from '@angular/http';
 import { RequestOptions, Request, RequestMethod } from '@angular/http';
+import { StorageService } from '../../services/storage.service'
+import { MyHttpService } from '../../services/MyHttp.service';
+
 
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
@@ -13,35 +16,34 @@ import 'rxjs/Rx';
 })
 export class LectureComponent implements OnInit {
   @Input() curNodeId;
+  token = this.storage.getItem('token');
 
-  lectures = [
-    {
-      "lid": 78,
-      "title": "第一课",
-      "description": "这是高级web第一次课的课件",
-      "url":"myurl"
-    },
-    {
-      "lid": 8,
-      "title": "第二课",
-      "description": "这是高级web第二次课的课件",
-      "url":"myurl"
-    },
-    {
-      "lid": 908,
-      "title": "第三课",
-      "description": "这是高级web第三次课的课件",
-      "url":"myurl"
-    }
-  ];
+  lectures = [];
 
 
-  constructor(private http: Http) { }
+  constructor(
+    private storage: StorageService,
+    private myHttp: MyHttpService) { }
 
   ngOnInit() {
   }
-  
-  
+
+  getLectures() {
+    console.log("get lectures");
+
+    let url = "/nodes/" + this.curNodeId + "/lectures";
+
+    let _that = this;
+    this.myHttp.get(url).subscribe(function (data) {
+      console.log("get lectures resp");
+      console.log(data);
+      console.log(data['_body']);
+      _that.lectures = JSON.parse(data['_body']);
+    }, function (err) {
+      console.dir(err);
+    });
+  }
+
 
   onSuc(e) {
     alert("success");

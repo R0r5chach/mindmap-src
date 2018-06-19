@@ -9,7 +9,7 @@ import {
     Headers
 } from '@angular/http';
 
-const baseURL = 'http://192.168.1.100:8080';
+const baseURL = 'http://192.168.1.104:8080';
 
 @Injectable()
 export class MyHttpService {

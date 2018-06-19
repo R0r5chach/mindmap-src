@@ -4,13 +4,14 @@
   </div>
 
   <div class="card-body">
-    <p>{{lec.description}}</p>
-    <button type="button"
+    <p>描述：{{lec.title}}</p>
+    <p>名称：{{lec.fileName}}</p>
+    <button type="button" class="btn btn-primary"
         fileSaver
         [method]="'GET'"
-        [fileName]="lec.title"
-        [url]="'http://10.222.174.42:8080/resources/'+lec.lid+'/file'"
-        [header]="{Authorization: token }"
+        [fileName]="lec.fileName"
+        [url]="'http://192.168.1.104:8080/lectures/'+lec.id+'/download'"
+        [header]="{Authorization: token}"
         (success)="onSuc($event)"
         (error)="onErr($event)">下载</button>
   </div>

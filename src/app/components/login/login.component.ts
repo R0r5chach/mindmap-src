@@ -19,18 +19,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.storage.getItem("curUser")){
+      this.storage.removeItem("curUser");
+    }
     this.user = {
       email: '',
-      password: '',
-      type: 'TEACHER'
+      password: ''
     };
-  }
-
-  setTypeStu() {
-    this.user.type = 'STUDENT';
-  }
-  setTypeTec() {
-    this.user.type = 'TEACHER';
   }
 
   login() {
@@ -56,7 +51,9 @@ export class LoginComponent implements OnInit {
       let token = JSON.parse(data['_body'])["token"];
       _that.storage.setItem("token", token);
       console.log("log in success, store user");
-      _that.storage.setItem("curUser", _that.user);
+      let user = JSON.parse(data['_body'])["user"];
+      console.log(user);
+      _that.storage.setItem("curUser", user);
       _that.router.navigate(['courselist']);
 
     }, function (err) {

@@ -14,6 +14,7 @@ import * as $ from 'jquery';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MyHttpService } from '../../services/MyHttp.service';
 import { resource } from 'selenium-webdriver/http';
+import { ResourceComponent } from '../resource/resource.component';
 
 @Component({
     selector: 'app-course',
@@ -22,11 +23,12 @@ import { resource } from 'selenium-webdriver/http';
 })
 
 export class CourseComponent implements OnInit {
+    serverUrl = "http://192.168.1.104:8080/";
     curNodeId;
     curUser = this.storage.getItem("curUser");
     courseId;
     sidebarType = 0;
-    description = "请输入描述";
+    description = "";
     index = "hello";
 
     public graphs = [
@@ -90,19 +92,29 @@ export class CourseComponent implements OnInit {
         }
     };
 
-    lectureContent;
+    lectureContent = {
+        uploader: new FileUploader({
+            url: this.serverUrl + "nodes/" + this.curNodeId + "/lectures",
+            authToken: this.storage.getItem('token'),
+            method: "POST",
+            itemAlias: "lecture",
+            autoUpload: false
+        })
+    };
+
 
     recourcesContent = {
         uploader: new FileUploader({
-            url: "http://192.168.1.104:8080/nodes/" + this.curNodeId + "/resources/files",
+            url: this.serverUrl + "nodes/" + this.curNodeId + "/resources/files",
             authToken: this.storage.getItem('token'),
             method: "POST",
             itemAlias: "file",
             autoUpload: false
         }),
         URL: {
-            name: "",
-            location: ""
+            title: "",
+            link: "",
+            type: "URL"
         }
     }
 
@@ -110,11 +122,11 @@ export class CourseComponent implements OnInit {
     @ViewChild(MindmapComponent) child: MindmapComponent;
     @ViewChild(HomeworkComponent) homework: HomeworkComponent;
     @ViewChild(LectureComponent) lecture: LectureComponent;
+    @ViewChild(ResourceComponent) resource: ResourceComponent;
 
     modalRef: BsModalRef;
 
-    constructor(
-        private http: Http,
+    constructor(private http: Http,
         private myHttp: MyHttpService,
         private routerIonfo: ActivatedRoute,
         private modalService: BsModalService,
@@ -128,7 +140,18 @@ export class CourseComponent implements OnInit {
         this.startJquery();
         this.recourcesContent.uploader.onSuccessItem = this.successItem.bind(this);
         this.recourcesContent.uploader.onAfterAddingFile = this.afterAddFile.bind(this);
-        this.recourcesContent.uploader.onBuildItemForm = this.buildItemForm.bind(this);
+        this.recourcesContent.uploader.onBuildItemForm = (fileItem: any, form: any) => {
+            fileItem.url = this.serverUrl + "nodes/" + this.curNodeId + "/resources/files";
+            alert('test');
+            form.append("description", this.description);
+        };
+        this.lectureContent.uploader.onSuccessItem = this.successItem.bind(this);
+        this.lectureContent.uploader.onAfterAddingFile = this.afterAddFile.bind(this);
+        this.lectureContent.uploader.onBuildItemForm = (fileItem: any, form: any) => {
+            fileItem.url = this.serverUrl + "nodes/" + this.curNodeId + "/lectures";
+            alert('test');
+            form.append("description", this.description);
+        };
         // this.uploader.onSuccessItem = this.successItem.bind(this);
         // this.uploader.onAfterAddingFile = this.afterAddFile;
         // this.uploader.onBuildItemForm = this.buildItemForm;
@@ -149,7 +172,7 @@ export class CourseComponent implements OnInit {
                 this.lecture.getLectures();
                 break;
             case 3:
-                this.lecture.getLectures();
+                this.resource.getResources();
                 break;
             default:
                 break;
@@ -168,15 +191,15 @@ export class CourseComponent implements OnInit {
 
     changeStatus(event) {
         this.curNodeId = event;
-        this.lectureContent = {
-            uploader: new FileUploader({
-                url: "http://192.168.1.104:8080/nodes/" + this.curNodeId + "/lectures",
-                authToken: this.storage.getItem('token'),
-                method: "POST",
-                itemAlias: "lecture",
-                autoUpload: false
-            })
-        };
+        // this.lectureContent = {
+        //   uploader: new FileUploader({
+        //     url: this.serverUrl + "nodes/" + this.curNodeId + "/lectures",
+        //     authToken: this.storage.getItem('token'),
+        //     method: "POST",
+        //     itemAlias: "lecture",
+        //     autoUpload: false
+        //   })
+        // };
     }
 
     save() {
@@ -270,7 +293,6 @@ export class CourseComponent implements OnInit {
             console.dir(err);
         });
     }
-
 
 
     //作业部分方法--------------------------------------------------------------
@@ -388,11 +410,11 @@ export class CourseComponent implements OnInit {
         // this.curContent.uploader.options.url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/" + this.curContent.formData.type;
         // fileItem.url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/" + this.curContent.formData.type;
         if (this.sidebarType == 2) {
-            fileItem.url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/lecture";
+            fileItem.url = this.serverUrl + "nodes/" + this.curNodeId + "/lectures";
         } else {
-            fileItem.url = "http://10.222.174.42:8080/nodes/" + this.curNodeId + "/resources/files";
+            fileItem.url = this.serverUrl + "nodes/" + this.curNodeId + "/resources/files";
         }
-        alert("hello");
+        alert("testefasfdadfasfdas");
         console.log(this.description);
         form.append("description", this.description);
     }
@@ -404,12 +426,12 @@ export class CourseComponent implements OnInit {
 
     //上传文件成功回执
     successItem(item: FileItem, response: string, status: number): any {
-        // 上传文件成功 
+        // 上传文件成功
         if (status == 200) {
             // 上传文件后获取服务器返回的数据
             let tempRes = JSON.parse(response);
         } else {
-            // 上传文件后获取服务器返回的数据错误  
+            // 上传文件后获取服务器返回的数据错误
         }
         console.info(" for " + item.file.name + " status " + status);
     }
@@ -420,12 +442,25 @@ export class CourseComponent implements OnInit {
     }
 
     addURL() {
-        this.modalRef.hide();
         //提交新的URL资源
+        console.log("add url");
+        let url = "/nodes/" + this.curNodeId + "/resources/url";
+        let body = JSON.stringify(this.recourcesContent.URL);
+        console.log(body);
+
+        let _that = this;
+        this.myHttp.post(url, body).subscribe(function (data) {
+            console.log("add url resp");
+            console.dir(data);
+
+            //刷新子模块问题列表
+            _that.resource.getResources();
+            _that.modalRef.hide();
+        }, function (err) {
+            console.dir(err);
+        });
+
     }
-
-
-
 
 
 }

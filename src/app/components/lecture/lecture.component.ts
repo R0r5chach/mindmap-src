@@ -1,9 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Http, Jsonp, Headers } from '@angular/http';
-import { RequestOptions, Request, RequestMethod } from '@angular/http';
 import { StorageService } from '../../services/storage.service'
 import { MyHttpService } from '../../services/MyHttp.service';
-
 
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
@@ -23,7 +20,7 @@ export class LectureComponent implements OnInit {
 
   constructor(
     private storage: StorageService,
-    private myHttp: MyHttpService) { }
+    private myHttp: MyHttpService) {}
 
   ngOnInit() {
   }

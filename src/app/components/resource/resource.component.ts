@@ -34,8 +34,18 @@ export class ResourceComponent implements OnInit {
       console.log(data['_body']);
       _that.resources = JSON.parse(data['_body']);
     }, function (err) {
-      console.dir(err);
+      console.log(err);
     });
   }
 
+  onSuc(e) {
+    alert("success");
+    console.log(e);
+  }
+
+  onErr(e) {
+    console.log(this.curNodeId);
+    alert("failer");
+    console.log(e);
+  }
 }

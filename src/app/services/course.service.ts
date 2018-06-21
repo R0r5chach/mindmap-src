@@ -1,57 +1,56 @@
 import { Injectable } from '@angular/core';
-import { Http, Jsonp, Headers } from '@angular/http';
-// import { Observable } from 'rxjs';
-// import 'rxjs/Rx';
+import { MyHttpService } from './MyHttp.service';
+
 
 @Injectable()
 export class CourseService {
-    private headers = new Headers({ 'Content-Type': 'application/json' });
 
-    constructor(private http: Http) { }
+    constructor(private myHttp: MyHttpService) { }
 
     //POST name, code, teacher_id
     create(newCourse) {
-        let url = "http://192.168.1.102:8080/courses";
-
+        let url = "/courses";
         let body = JSON.stringify(newCourse);
 
-        this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {
-            console.dir(data);
-            console.log(data['_body']);
-
-        }, function (err) {
-            console.dir(err);
-        });
+        return this.myHttp.post(url, body);
     }
 
     //DELETE
     delete() {
-        let url = '/course/{cid}';
+        let url = "/course/{cid}";
+    }
+
+    //GET
+    getChoosableCourses() {
+        let url = "/courses";
+
+        return this.myHttp.get(url);
     }
 
     //GET 
     listCoursesOfUser() {
-        let url = 'http://10.222.174.42:8080/acount/courses';
+        let url = "/account/courses";
 
+        return this.myHttp.get(url);
     }
 
     //GET
     getCourseData() {
-        let url = '/courses/{uid}';
+        let url = "/courses/{uid}";
     }
 
     //PUT name, code
     update() {
-        let url = '/courses/{cid}';
+        let url = "/courses/{cid}";
     }
 
     //GET
     listStudentsOfCourse() {
-        let url = '/courses/{cid}/students';
+        let url = "/courses/{cid}/students";
     }
 
     //POST uid
     addStudentToCourse() {
-        let url = '/courses/{cid}/students';
+        let url = "/courses/{cid}/students";
     }
 }

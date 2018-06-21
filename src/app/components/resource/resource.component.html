@@ -10,7 +10,7 @@
       fileSaver 
       [method]="'GET'" 
       [fileName]="res.fileName"
-      [url]="'http://192.168.1.104:8080/resources/'+res.id+'/file'"
+      [url]="myHttp.baseURL + '/resources/' + res.id + '/file'"
       [header]="{Authorization: token}"
       [query]="{ pi: res.id }"
       (success)="onSuc($event)" 

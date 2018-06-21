@@ -17,7 +17,8 @@ export class ResourceComponent implements OnInit {
   constructor(
     private storage: StorageService,
     private myHttp: MyHttpService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
   }

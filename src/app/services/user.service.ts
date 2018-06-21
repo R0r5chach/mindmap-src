@@ -1,26 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Http, Jsonp, Headers } from '@angular/http';
-// import { Observable } from 'rxjs';
-// import 'rxjs/Rx';
+import { MyHttpService } from './MyHttp.service';
 
 @Injectable()
 export class UserService {
-    private headers = new Headers({ 'Content-Type': 'application/json' });
 
-    constructor(private http: Http) { }
+    constructor(private myHttp: MyHttpService) { }
 
     //POST email, name, password, type
     register(user) {
-        let url = 'http://192.168.1.102:8080/users';
+        let url = '/users';
         let body = JSON.stringify(user);
-
-        this.http.post(url, body, { headers: this.headers }).subscribe(function (data) {
-            console.dir(data);
-            console.log(data['_body']);
-            // localStorage.setItem('currentUsr', JSON.stringify(data));
-        }, function (err) {
-            console.dir(err);
-        });
+        return this.myHttp.post(url, body);
     }
 
     //DELETE 

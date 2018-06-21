@@ -38,10 +38,20 @@ export class RegisterComponent implements OnInit {
   register() {
     console.log("begin to register user: ");
     console.log(this.user);
-    this.router.navigate(['login']);
 
     //与服务器端通信，确认是否注册成功
-    this.userservice.register(this.user);
+    let _that = this;
+    this.userservice.register(this.user).subscribe(function (suc) {
+      let sucResp = JSON.parse(suc['_body']);
+      console.log("register resp:");
+      console.log(sucResp);
 
+      _that.router.navigate(['login']);
+    }, function (err) {
+      let errResp = JSON.parse(err['_body']);
+      console.log(errResp);
+      alert(errResp.message);
+    });
   }
+
 }

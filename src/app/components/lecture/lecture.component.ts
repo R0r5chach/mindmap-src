@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { StorageService } from '../../services/storage.service'
 import { MyHttpService } from '../../services/MyHttp.service';
 
-import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 
 

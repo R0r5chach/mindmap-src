@@ -12,6 +12,7 @@ import 'rxjs/Rx';
 })
 export class LectureComponent implements OnInit {
   @Input() curNodeId;
+  nid;
   token = this.storage.getItem('token');
 
   lectures = [];
@@ -24,10 +25,11 @@ export class LectureComponent implements OnInit {
   ngOnInit() {
   }
 
-  getLectures() {
+  getLectures(nid){
+    this.nid = nid;
     console.log("get lectures");
 
-    let url = "/nodes/" + this.curNodeId + "/lectures";
+    let url = "/nodes/" + this.nid + "/lectures";
 
     let _that = this;
     this.myHttp.get(url).subscribe(function (data) {

@@ -14,9 +14,6 @@ const options = {
 }
 // 思维导图Mindmap渲染的json文件
 let graphData: { [key: string]: object; } = {};
-let currentGraphID;
-let mind = {}
-
 
 @Component({
   selector: 'app-mindmap',
@@ -28,7 +25,7 @@ export class MindmapComponent implements OnInit {
   @Input() curNodeId = -1;
   @Output() change: EventEmitter<number> = new EventEmitter<number>();
   curUser;
-
+  currentGraphID;
 
   public title = 'mindmap';
   // mindMap;
@@ -78,16 +75,16 @@ export class MindmapComponent implements OnInit {
   //打印图片
   prtScn() {
     const selected_node = this.jm.get_selected_node(); // as parent of new node
-    if (!selected_node) {
-      alert("请先选中节点");
-      return;
-    }
+    // if (!selected_node) {
+    //   alert("请先选中节点");
+    //   return;
+    // }
     this.jm.screenshot.shootDownload();
   }
 
   //创建思维导图
   createGraph(id) {
-    currentGraphID = id;
+    this.currentGraphID = id;
     console.log("create");
     const rootId = "root" + jsMind.util.uuid.newid();
 
@@ -144,13 +141,13 @@ export class MindmapComponent implements OnInit {
   //保存思维导图
   save() {
     const data = jsMind.format.node_tree.get_data(this.jm.mind);
-    graphData[currentGraphID] = data;
+    graphData[this.currentGraphID] = data;
     console.log("save graph:");
 
     let body = { "jsmind": JSON.stringify(data) };
 
     let _that = this;
-    this.graphService.updateGraphData(currentGraphID, body).subscribe(function (suc) {
+    this.graphService.updateGraphData(this.currentGraphID, body).subscribe(function (suc) {
       let sucResp = JSON.parse(suc['_body']);
       console.log("save graph resp");
       console.log(sucResp);
@@ -164,9 +161,9 @@ export class MindmapComponent implements OnInit {
 
   //根据graphID切换思维导图
   getData(graphId) {
-    currentGraphID = graphId;
+    this.currentGraphID = graphId;
+
     if (graphData[graphId] == null) {
-      let url = "/graphs/" + currentGraphID + "/jsmind";
 
       console.log("get jsmind");
       let _that = this;
@@ -175,7 +172,7 @@ export class MindmapComponent implements OnInit {
         console.log("get jsmind resp");
         console.log(sucResp);
 
-        graphData[graphId] = JSON.parse(JSON.parse(sucResp).jsmind);
+        graphData[graphId] = JSON.parse(sucResp.jsmind);
 
         _that.jm.show(graphData[graphId]);
       }, function (err) {

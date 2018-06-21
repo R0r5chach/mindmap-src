@@ -7,9 +7,7 @@ export class GraphService {
 
     //GET
     listGraphsOfCourse(cid) {
-        let url = "courses/" + cid + "/graphs";
-
-        alert(url);
+        let url = "/courses/" + cid + "/graphs";
 
         return this.myHttp.get(url);
     }

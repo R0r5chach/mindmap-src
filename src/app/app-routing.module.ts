@@ -8,12 +8,14 @@ import { CourselistComponent } from './components/courselist/courselist.componen
 import { CourseComponent } from './components/course/course.component';
 import { MindmapComponent } from './components/mindmap/mindmap.component';
 import { HomeworkComponent } from './components/homework/homework.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'home', component: AppComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'profile', component: ProfileComponent },
     { path: 'courselist', component: CourselistComponent },
     {
         path: 'course', component: CourseComponent,

@@ -9,6 +9,7 @@ import { MyHttpService } from '../../services/MyHttp.service';
 })
 export class ResourceComponent implements OnInit {
   @Input() curNodeId;
+  nid;
   token = this.storage.getItem('token');
 
 
@@ -23,10 +24,11 @@ export class ResourceComponent implements OnInit {
   ngOnInit() {
   }
 
-  getResources() {
+  getResources(nid) {
+    this.nid = nid;
     console.log("get resources");
 
-    let url = "/nodes/" + this.curNodeId + "/resources";
+    let url = "/nodes/" + this.nid + "/resources";
 
     let _that = this;
     this.myHttp.get(url).subscribe(function (data) {

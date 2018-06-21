@@ -4,11 +4,6 @@
 
     <div *ngIf="sidebarType == 0" class="col-md-2" style="text-align:center">
         <div class="my-nav">
-            <div class="nav-top">
-                <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
-                    <img src="../../../assets/mini.png">
-                </div>
-            </div>
             <ul>
                 <li class="nav-item">
                     <a href="javascript:;">
@@ -49,37 +44,22 @@
                         <div class="modal-body">
                             <form (ngSubmit)="form.form.valid && addNewGraph()" #form="ngForm">
                                 <input type="text" name="newGraphName" [(ngModel)]="newGraph.name" class="form-control" placeholder="名字" required autofocus>
+                                <br>
                                 <input type="text" name="newGraphDes" [(ngModel)]="newGraph.description" class="form-control" placeholder="描述" required>
+                                <br>
 
                                 <input type="button" class="btn btn-default" name="cancel" popover="Vivamus sagittis" (click)="cancelAdd()" value="取消">
-                                <input type="submit" class="btn btn-primary" name="confirm" tooltip="Vivamus sagittis" value="确认">
+                                <input type="submit" class="btn btn-primary" name="confirm" tooltip="Vivamus sagittis" value="确认" style="margin-left: 10px">
                             </form>
                         </div>
                     </ng-template>
                 </li>
                 <li *ngIf="curUser.type=='TEACHER'" class="nav-item">
-                    <a href="javascript:;">
+                    <a href="javascript:;" (click)="save()">
                         <i class="my-icon nav-icon icon_3"></i>
-                        <span>额外操作</span>
+                        <span>保存修改</span>
                         <i class="my-icon nav-more"></i>
                     </a>
-                    <ul>
-                        <li>
-                            <a href="javascript:;" (click)="save()">
-                                <span>保存</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span>打个酱油</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">
-                                <span>也打酱油</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </div>
@@ -87,11 +67,11 @@
 
     <div *ngIf="sidebarType == 1" class="col-md-2" style="text-align:center">
         <div class="my-nav">
-            <div class="nav-top">
+            <!-- <div class="nav-top">
                 <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
                     <img src="../../../assets/mini.png">
                 </div>
-            </div>
+            </div> -->
             <ul>
                 <li *ngIf="curUser.type=='TEACHER'" class="nav-item">
                     <a href="javascript:;">
@@ -170,11 +150,11 @@
 
     <div *ngIf="sidebarType == 2" class="col-md-2" style="text-align:center">
         <div class="my-nav">
-            <div class="nav-top">
+            <!-- <div class="nav-top">
                 <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
                     <img src="../../../assets/mini.png">
                 </div>
-            </div>
+            </div> -->
             <ul>
                 <li class="nav-item">
                     <a *ngIf="curUser.type=='TEACHER'" href="javascript:;" (click)="lgModal.show()">
@@ -278,11 +258,11 @@
 
     <div *ngIf="sidebarType == 3" class="col-md-2" style="text-align:center">
         <div class="my-nav">
-            <div class="nav-top">
+            <!-- <div class="nav-top">
                 <div id="mini" style="border-bottom:1px solid rgba(255,255,255,.1)">
                     <img src="../../../assets/mini.png">
                 </div>
-            </div>
+            </div> -->
             <ul>
                 <li class="nav-item">
                     <a *ngIf="curUser.type=='TEACHER'" href="javascript:;">
@@ -352,7 +332,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="progress" style="margin-bottom: 0; height: 70%; width: 90%">
-                                                                    <div class="progress-bar" style="margin-bottom: 0; height: 100%; background-color: red" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }">{{item.progress}}</div>
+                                                                    <div class="progress-bar" style="margin-bottom: 0; height: 100%; background-color: red" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
                                                                 </div>
                                                             </td>
                                                             <td>

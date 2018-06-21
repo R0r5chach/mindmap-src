@@ -21,6 +21,9 @@ export class UserService {
     //PUT email, name, password, newPassword
     update(user) {
         let url = '/account';
+        let body = JSON.stringify(user);
+
+        return this.myHttp.put(url, body);
     }
 
     //GET
@@ -31,5 +34,13 @@ export class UserService {
     //GET
     getPublic() {
         let url = '/users/{uid}';
+    }
+
+    //POST
+    getVerificationCode(email) {
+        let url = "/users/verification_code";
+        let body = JSON.stringify(email);
+
+        return this.myHttp.post(url, body);
     }
 }

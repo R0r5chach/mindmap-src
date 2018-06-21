@@ -71,21 +71,22 @@ export class CourselistComponent implements OnInit {
     this.modalRef.hide();
     console.log("begin to choose course:");
 
-    let url = "/courses/" + this.choosenCourse.id + "/students";
-    let body = JSON.stringify({ "code": this.choosenCourse.code });
+    // let url = "/courses/" + this.choosenCourse.id + "/students";
+    let body = { "code": this.choosenCourse.code };
 
     let _that = this;
-    this.myHttp.post(url, body).subscribe(function (data) {
+    this.courseService.addStudentToCourse(this.choosenCourse.id, body).subscribe(function (suc) {
+      let sucResp = JSON.parse(suc['_body']);
       console.log("choose course resp:");
-      console.log(data);
-      console.log(data['_body']);
-      //更新课程列表
+      console.log(sucResp);
+
       _that.getMyCourses();
       _that.getChoosableCourses();
 
     }, function (err) {
-      console.log(err['_body']);
-      alert(JSON.parse(err['_body']).message);
+      let errResp = JSON.parse(err['_body']);
+      console.log(errResp);
+      alert(errResp.message);
     });
 
     this.choosenCourse = {

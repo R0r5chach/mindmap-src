@@ -150,10 +150,10 @@ export class CourseComponent implements OnInit {
                 this.homework.getQuestions(this.curNodeId);
                 break;
             case 2:
-                this.lecture.getLectures();
+                this.lecture.getLectures(this.curNodeId);
                 break;
             case 3:
-                this.resource.getResources();
+                this.resource.getResources(this.curNodeId);
                 break;
             default:
                 break;
@@ -221,15 +221,14 @@ export class CourseComponent implements OnInit {
 
         let _that = this;
         this.graphService.listGraphsOfCourse(this.courseId).subscribe(function (suc) {
-            console.log(suc);
             let sucResp = JSON.parse(suc['_body']);
-            console.log("get graph resp");
+            console.log("get graphs resp:");
             console.log(sucResp);
             _that.graphs = sucResp;
         }, function (err) {
             let errResp = JSON.parse(err['_body']);
-            console.log(err);
-            alert(errResp);
+            console.log(errResp);
+            alert(errResp.message);
         });
     }
 
@@ -319,12 +318,7 @@ export class CourseComponent implements OnInit {
     }
 
     setMultiAnswer(choice) {
-        // console.log(choice);
         this.homeworkContent.newMultichoice.answer = choice;
-    }
-
-    setAnswer(ans) {
-        // console.log(ans);
     }
 
     clearQuestion() {
@@ -396,9 +390,11 @@ export class CourseComponent implements OnInit {
     //上传文件成功回执
     successItem(item: FileItem, response: string, status: number): any {
         // 上传文件成功
-        if (status == 200) {
+        if (status == 201) {
             // 上传文件后获取服务器返回的数据
             let tempRes = JSON.parse(response);
+            this.lecture.getLectures(this.curNodeId);
+            this.resource.getResources(this.curNodeId);
         } else {
             // 上传文件后获取服务器返回的数据错误
         }
@@ -423,7 +419,7 @@ export class CourseComponent implements OnInit {
             console.dir(data);
 
             //刷新子模块问题列表
-            _that.resource.getResources();
+            _that.resource.getResources(this.curNodeId);
             _that.modalRef.hide();
         }, function (err) {
             console.dir(err);

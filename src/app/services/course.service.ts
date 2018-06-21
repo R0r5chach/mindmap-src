@@ -50,7 +50,10 @@ export class CourseService {
     }
 
     //POST uid
-    addStudentToCourse() {
-        let url = "/courses/{cid}/students";
+    addStudentToCourse(cid, code) {
+        let url = "/courses/"+cid+"/students";
+        let body = JSON.stringify(code);
+
+        return this.myHttp.post(url, body);
     }
 }

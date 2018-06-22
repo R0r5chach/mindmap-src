@@ -126,7 +126,6 @@ export class CourseComponent implements OnInit {
         this.recourcesContent.uploader.onAfterAddingFile = this.afterAddFile.bind(this);
         this.recourcesContent.uploader.onBuildItemForm = (fileItem: any, form: any) => {
             fileItem.url = this.serverUrl + "/nodes/" + this.curNodeId + "/resources/files";
-            alert('test');
             form.append("description", this.description);
         };
         this.lectureContent.uploader.onSuccessItem = this.successItem.bind(this);
@@ -448,7 +447,7 @@ export class CourseComponent implements OnInit {
             console.dir(data);
 
             //刷新子模块问题列表
-            _that.resource.getResources(this.curNodeId);
+            _that.resource.getResources(_that.curNodeId);
             _that.modalRef.hide();
         }, function (err) {
             console.dir(err);

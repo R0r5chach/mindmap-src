@@ -9,6 +9,8 @@ import { CourseComponent } from './components/course/course.component';
 import { MindmapComponent } from './components/mindmap/mindmap.component';
 import { HomeworkComponent } from './components/homework/homework.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { LectureComponent } from './components/lecture/lecture.component';
+import { ResourceComponent } from './components/resource/resource.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -20,9 +22,10 @@ const routes: Routes = [
     {
         path: 'course', component: CourseComponent,
         children: [
-            { path: '', redirectTo: 'mindmap', pathMatch: 'full' },
             { path: 'mindmap', component: MindmapComponent },
-            { path: 'homework', component: HomeworkComponent }
+            { path: 'homework', component: HomeworkComponent },
+            { path: 'lecture', component: LectureComponent },
+            { path: 'resource', component: ResourceComponent }
         ]
     },
 

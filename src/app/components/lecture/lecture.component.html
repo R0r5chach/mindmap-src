@@ -4,7 +4,7 @@
   </div>
 
   <div class="card-body">
-    <button type="button" class="btn btn-primary" fileSaver [method]="'GET'" [fileName]="lec.fileName" [url]="myHttp.baseURL + '/lectures/' + lec.id + '/download'"
+    <button type="button" class="btn btn-primary" fileSaver [method]="'GET'" [fileName]="lec.title" [url]="myHttp.baseURL + '/lectures/' + lec.id + '/download'"
       [header]="{Authorization: token}" (success)="onSuc($event)" (error)="onErr($event)">下载</button>
 
     <button *ngIf="curUser.type == 'TEACHER'" class="btn btn-primary" (click)="deleteLecture(lec.id)" style="margin-left: 10px">删除</button>

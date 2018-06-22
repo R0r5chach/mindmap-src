@@ -32,7 +32,7 @@ export class ResourceComponent implements OnInit {
     console.log("get resources");
 
     let _that = this;
-    this.resourceService.listResourcesOfNode(nid).subscribe(function (suc) {
+    this.resourceService.listResourcesOfNode(this.nid).subscribe(function (suc) {
       let sucResp = JSON.parse(suc['_body']);
       console.log("get resources resp:");
       console.log(sucResp);

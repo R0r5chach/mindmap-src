@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { StorageService } from '../../services/storage.service'
 import { MyHttpService } from '../../services/MyHttp.service';
+import { ResourceService } from '../../services/resource.service';
 
 @Component({
   selector: 'app-resource',
@@ -9,6 +10,7 @@ import { MyHttpService } from '../../services/MyHttp.service';
 })
 export class ResourceComponent implements OnInit {
   @Input() curNodeId;
+  curUser = this.storage.getItem("curUser");
   nid;
   token = this.storage.getItem('token');
 
@@ -17,7 +19,8 @@ export class ResourceComponent implements OnInit {
 
   constructor(
     private storage: StorageService,
-    private myHttp: MyHttpService
+    private myHttp: MyHttpService,
+    private resourceService: ResourceService
   ) {
   }
 
@@ -28,16 +31,30 @@ export class ResourceComponent implements OnInit {
     this.nid = nid;
     console.log("get resources");
 
-    let url = "/nodes/" + this.nid + "/resources";
+    let _that = this;
+    this.resourceService.listResourcesOfNode(nid).subscribe(function (suc) {
+      let sucResp = JSON.parse(suc['_body']);
+      console.log("get resources resp:");
+      console.log(sucResp);
+      _that.resources = sucResp;
+    }, function (err) {
+      let errResp = JSON.parse(err['_body']);
+      console.log(errResp);
+      alert(errResp);
+    });
+  }
+
+  deleteResource(rid) {
+    console.log("delete resource");
 
     let _that = this;
-    this.myHttp.get(url).subscribe(function (data) {
-      console.log("get resources resp:");
-      console.log(data);
-      console.log(data['_body']);
-      _that.resources = JSON.parse(data['_body']);
+    this.resourceService.delete(rid).subscribe(function (suc) {
+      console.log("delete resource resp:");
+      console.log(suc);
+      _that.getResources(_that.nid);
     }, function (err) {
       console.log(err);
+      alert(err);
     });
   }
 
@@ -48,7 +65,7 @@ export class ResourceComponent implements OnInit {
 
   onErr(e) {
     console.log(this.curNodeId);
-    alert("failer");
+    alert("fail");
     console.log(e);
   }
 }

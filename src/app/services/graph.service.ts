@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MyHttpService } from './MyHttp.service';
+import { textSpanIntersectsWithPosition } from 'typescript';
 
 @Injectable()
 export class GraphService {
@@ -36,8 +37,9 @@ export class GraphService {
     }
 
     //DELETE
-    delete() {
-        let url = '/graphs/{gid}';
+    delete(gid) {
+        let url = '/graphs/' + gid;
+        return this.myHttp.delete(url);
     }
 
 

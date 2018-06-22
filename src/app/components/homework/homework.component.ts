@@ -10,7 +10,7 @@ import { QuestionService } from '../../services/question.service';
 })
 
 export class HomeworkComponent implements OnInit {
-  @Input() curNodeId;
+  // @Input() curNodeId;
   nid;
 
   @ViewChild('test', { read: ElementRef }) private test: ElementRef;
@@ -52,20 +52,22 @@ export class HomeworkComponent implements OnInit {
     });
   }
 
+  alerta() {
+    alert("a");
+  }
+
   answerQuestion(q) {
     if (q.answer == "") {
       alert("答案不能为空！"); { }
     } else {
       let answer = { "answer": q.answer };
-      console.log("to answer question:");
+      console.log("answer question:");
 
       let _that = this;
       this.questionService.addAnswerToQuestion(q.id, answer).subscribe(function (suc) {
         // let sucResp = JSON.parse(suc['_body']);
         console.log("answer question resp");
         // console.log(sucResp);
-
-        alert("answered");
         _that.getQuestions(_that.nid);
         _that.initQWithStatus();
       }, function (err) {
@@ -77,6 +79,26 @@ export class HomeworkComponent implements OnInit {
     }
   }
 
+  deleteQuestion(qid) {
+    console.log("delete question:");
+
+    let _that = this;
+    this.questionService.delete(qid).subscribe(function (suc) {
+      // let sucResp = JSON.parse(suc['_body']);
+      console.log("delete question resp");
+      // console.log(sucResp);
+      console.log(suc);
+
+      _that.getQuestions(_that.nid);
+      _that.initQWithStatus();
+    }, function (err) {
+      let errResp = JSON.parse(err['_body']);
+      console.dir(errResp);
+      alert(errResp.message);
+    });
+
+  }
+
   initQWithStatus() {
     console.log("init questions ");
     for (let q of this.questions) {
@@ -85,6 +107,17 @@ export class HomeworkComponent implements OnInit {
       } else {
         q.answered = true;
       }
+
+      if(q.correctNum != 0){
+          q.correctRatio = q.correctNum / q.submissionNum * 100 + "%";
+      }else{
+          q.correctRatio = 0 + "%";
+      }
+
+      if(q.submissionNum == 0){
+        q.correctRatio = "没有回答";
+      }
+
     }
   }
 

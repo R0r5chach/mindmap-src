@@ -6,8 +6,9 @@
       <h2 class="my-0 font-weight-normal">{{curUser.name}}</h2>
     </div>
     <div class="card-body">
-      <p class="card-title pricing-card-title">账号类型：{{curUser.type}}</p>
-      
+      <p class="card-title pricing-card-title">账号类型：{{profile.type}}</p>
+      <p class="card-title pricing-card-title">账户ID：{{profile.id}}</p>
+      <p class="card-title pricing-card-title">邮箱：{{profile.email}}</p>
       <button class="btn btn-primary" (click)="openModifyWindow(modifyTemplate)">修改密码</button>
     </div>
   </div>

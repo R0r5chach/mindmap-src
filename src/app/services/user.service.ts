@@ -15,7 +15,9 @@ export class UserService {
 
     //DELETE 
     delete() {
-        let url = '/account';
+        let url = "/account";
+
+        return this.myHttp.delete(url);
     }
 
     //PUT email, name, password, newPassword
@@ -28,7 +30,9 @@ export class UserService {
 
     //GET
     getPrivate() {
-        let url = '/account';
+        let url = "/account";
+
+        return this.myHttp.get(url);
     }
 
     //GET

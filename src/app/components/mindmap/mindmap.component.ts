@@ -26,6 +26,8 @@ export class MindmapComponent implements OnInit {
   @Output() change: EventEmitter<number> = new EventEmitter<number>();
   curUser;
   currentGraphID;
+  node_selected;
+
 
   public title = 'mindmap';
   // mindMap;
@@ -43,6 +45,7 @@ export class MindmapComponent implements OnInit {
 
   //初始化
   ngOnInit() {
+    this.node_selected = false;
     this.curUser = this.storage.getItem("curUser");
     this.jm = new jsMind(options);
     if (this.curUser.type == 'STUDENT') {
@@ -75,10 +78,6 @@ export class MindmapComponent implements OnInit {
   //打印图片
   prtScn() {
     const selected_node = this.jm.get_selected_node(); // as parent of new node
-    // if (!selected_node) {
-    //   alert("请先选中节点");
-    //   return;
-    // }
     this.jm.screenshot.shootDownload();
   }
 
@@ -126,12 +125,14 @@ export class MindmapComponent implements OnInit {
   }
 
   //查看节点是否被选中
-  checkStatus() {
+  checkStatus() { 
     const select_node = this.jm.get_selected_node();
     if (null == select_node) {
+      this.node_selected = false;
       this.curNodeId = null;
       console.log("nothing");
     } else {
+      this.node_selected = true;
       this.curNodeId = select_node.id;
       console.log(select_node);
     }
@@ -157,6 +158,11 @@ export class MindmapComponent implements OnInit {
       alert(errResp.message);
     });
 
+  }
+
+  //clear
+  clear() {
+    this.jm._reset();
   }
 
   //根据graphID切换思维导图

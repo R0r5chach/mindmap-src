@@ -42,7 +42,9 @@ export class QuestionService {
     }
 
     //DELETE
-    delete() {
-        let url = '/questions/{qid}';
+    delete(qid) {
+        let url = "/questions/" + qid;
+
+        return this.myHttp.delete(url);
     }
 }

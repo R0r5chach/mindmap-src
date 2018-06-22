@@ -25,6 +25,7 @@ import { GraphService } from '../../services/graph.service';
 export class CourseComponent implements OnInit {
     curUser = this.storage.getItem("curUser");
     serverUrl = this.myHttp.baseURL;
+    curGraphId;
     curNodeId;
     courseId;
     sidebarType = 0;
@@ -118,6 +119,7 @@ export class CourseComponent implements OnInit {
     ngOnInit() {
         this.courseId = this.routerIonfo.snapshot.queryParams["cid"];
         this.getGraphs();
+        this.curGraphId = null;
 
         this.startJquery();
         this.recourcesContent.uploader.onSuccessItem = this.successItem.bind(this);
@@ -161,16 +163,19 @@ export class CourseComponent implements OnInit {
     }
 
     prtScn() {
+        if (this.curGraphId == null) {
+            alert("请先选中课程");
+        } else {
         this.child.prtScn();
     }
+}
 
     changeGraph(item) {
         this.child.getData(item.id);
+        this.curGraphId = item.id;
     }
 
-    changeStatus(event) {
-        console.log("event:  ");
-        console.log(event);
+    changeStatus(event) {        
         this.curNodeId = event;
     }
 
@@ -233,8 +238,8 @@ export class CourseComponent implements OnInit {
     }
 
     addNewGraph() {
-        console.log("begin to add graph:");
-        console.log(this.newGraph);
+        // console.log("begin to add graph:");
+        // console.log(this.newGraph);
 
         let _that = this;
         this.graphService.addGraphToCourse(this.courseId, this.newGraph).subscribe(function (suc) {
@@ -268,6 +273,31 @@ export class CourseComponent implements OnInit {
         });
     }
 
+    //发送delete请求
+    deleteGraph() {
+        let _that = this;
+        let len = _that.graphs.length;
+        for(var i = 0; i < len; i++){
+            console.log(_that.curGraphId);
+            console.log(_that.graphs[i]);
+            if(_that.graphs[i].id == _that.curGraphId) {
+                _that.graphs.splice(i, 1);
+            }
+        }
+        console.log(this.curGraphId);
+        this.graphService.delete(this.curGraphId).subscribe(function (suc) {
+            _that.curGraphId = null;
+            _that.curNodeId = null;
+            console.log(_that.graphs);
+            
+            // _that.graphs.
+            _that.child.clear();
+        }, function (err) {
+            let errResp = JSON.parse(err['_body']);
+            console.log(errResp);
+            alert(errResp);
+        });
+    }
 
     //作业部分方法--------------------------------------------------------------
     openModal(template: TemplateRef<any>) {
@@ -378,8 +408,7 @@ export class CourseComponent implements OnInit {
             fileItem.url = this.serverUrl + "/nodes/" + this.curNodeId + "/resources/files";
         }
         alert("testefasfdadfasfdas");
-        console.log(this.description);
-        form.append("description", this.description);
+        form.append("description", "description");
     }
 
     //增加文件回执
